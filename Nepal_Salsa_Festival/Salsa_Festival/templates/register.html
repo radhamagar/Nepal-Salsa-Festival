@@ -1,5 +1,4 @@
-  
-    <style>
+<style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -56,37 +55,37 @@
       cursor: pointer;
     }
   </style>
-  <nav>
-    <a href="#">Home</a>
-    <a href="#">Login</a>
-    <a href="#">Events</a>
-    <a href="#">Schedule</a>
-    <a href="#">Participate</a>
-    <a href="#">Past Events</a>
-    <a href="#">About Us</a>
-    <a href="#">Contact Us</a>
-  </nav>
-  <div class="signup-box">
-    {% comment %} {% extends 'base.html' %} {% endcomment %}
+<nav>
+  <a href="#">Home</a>
+  <a href="#">Login</a>
+  <a href="#">Events</a>
+  <a href="#">Schedule</a>
+  <a href="#">Participate</a>
+  <a href="#">Past Events</a>
+  <a href="#">About Us</a>
+  <a href="#">Contact Us</a>
+</nav>
+<div class="signup-box">
+  {% comment %} {% extends 'base.html' %} {% endcomment %}
 
-    {% block content %}
-      <form method="POST" novalidate>
-        {% csrf_token %}
-        <h2>Sign Up</h2>
+  {% block content %}
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      <h2>Sign Up</h2>
 
-        {% for field in form %}
-          <p>
-            {% if field.errors %}
-              <ul class="errorlist">
-                {% for error in field.errors %}
-                  <li>{{ error }}</li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-            {{ field.label_tag }} {{ field }}
-          </p>
-        {% endfor %}
-        <input type="submit" value="Sign Up" />
-      </form>
-    {% endblock %}
-  </div>
+      {% for field in form %}
+        <p>
+          {% if field.errors %}
+            <ul class="errorlist">
+              {% for error in field.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          {{ field.label_tag }} {{ field }}
+        </p>
+      {% endfor %}
+      <input type="submit" value="Sign Up" />
+    </form>
+  {% endblock %}
+</div>

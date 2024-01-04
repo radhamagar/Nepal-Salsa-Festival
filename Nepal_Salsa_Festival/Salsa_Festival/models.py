@@ -1,7 +1,10 @@
-from django import forms
+from django.db import models
 
-class Register(forms.Form):
-      first_name = forms.CharField(label="First Name", max_length=100)
-      last_name = forms.CharField(label="Last Name", max_length=100)
-      email = forms.CharField(label="Email")
+class Register(models.Model):
+      first_name = models.CharField(max_length=100)
+      last_name = models.CharField( max_length=100)
+      email = models.CharField(max_length=100)
+      password=models.CharField(max_length=100)
+      confirm_password=models.CharField(max_length=100)
+      ph_no=models.IntegerField()
         
