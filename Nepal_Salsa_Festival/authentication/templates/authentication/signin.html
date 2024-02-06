@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Nepal Salsa Festival | Signin{% endblock title %}
+
+{% block content %}
+
+<link href="{% static '/authentication/main.css' %}" rel="stylesheet" />
+<div class="form_container">
+    <div class="row">
+        <div class="column">
+            <h1>Welcome!</h1>
+            <div class="separator"></div>
+            <p>Create an account</p>
+            <a class="btn" href="{% url 'signup' %}" class="btn">Sign Up</a>
+        </div>
+        <div class="column">
+            <form method="post" action="">
+                {% csrf_token %}
+                {% for field in form%}
+                <div class="form-field">
+                    <label for="{{ field.id_for_label  }}">{{ field.label }}</label>
+                    {{ field}}
+                </div>
+                {% endfor %}
+                <button class="btn no-border"  type="submit" name="signin">Sign In</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

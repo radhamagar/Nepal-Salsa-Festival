@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from authentication.forms import LoginForm, RegisterForm
-from authentication.models import User
+from .forms import LoginForm, RegisterForm
+from .models import User
 
 # Create your views here.
-def login(request):
+def signin(request):
     form = LoginForm()
 
     if (request.POST):
@@ -19,9 +19,9 @@ def login(request):
                 return redirect(reverse('home'))
 
     context = {'form' : form}
-    return render(request, 'authentication/login.html', context)
+    return render(request, 'authentication/signin.html', context)
 
-def register(request):
+def signup(request):
     form = RegisterForm()
 
     if (request.POST):
@@ -30,4 +30,4 @@ def register(request):
         return redirect(reverse('home'))
 
     context = {'form' : form}
-    return render(request, 'authentication/register.html', context)
+    return render(request, 'authentication/signup.html', context)

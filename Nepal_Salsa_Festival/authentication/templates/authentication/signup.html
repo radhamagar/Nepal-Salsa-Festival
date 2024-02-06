@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Nepal Salsa Festival | Sign Up{% endblock title %}
+
+{% block content %}
+<link href="{% static 'authentication/main.css' %}" rel="stylesheet" />
+<div class="form_container">
+    <div class="row">
+        <div class="column">
+            <h1>Welcome!</h1>
+            <p>Already Have an Account?</p>
+            <a href="signin" class="btn">Sign In</a>
+        </div>
+        <div class="column">
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="{{ form.first_name.id_for_label  }}">{{ form.first_name.label }}</label>
+                        {{form.first_name}}
+                    </div>
+                    <div class="form-field">
+                        <label for="{{ form.last_name.id_for_label  }}">{{ form.last_name.label }}</label>
+                        {{form.last_name}}
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <label for="{{ form.email.id_for_label  }}">{{ form.email.label }}</label>
+                    {{form.email}}
+                </div>
+
+                <div class="form-field">
+                    <label for="{{ form.ph_number.id_for_label  }}">{{ form.ph_number.label }}</label>
+                    {{form.ph_number}}
+                </div>
+
+                <div class="form-field">
+                    <label for="{{ form.password.id_for_label  }}">{{ form.password.label }}</label>
+                    {{form.password}}
+                </div>
+
+                <div class="form-field">
+                    <label for="{{ form.c_password.id_for_label  }}">{{ form.c_password.label }}</label>
+                    {{form.c_password}}
+                </div>
+
+                <button class="btn no-border" type="submit" name="signup">Sign Up</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+

@@ -1,5 +1,5 @@
 """
-URL configuration for nepal_salsa_festival_app project.
+URL configuration for Nepal_Salsa_Festival project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -15,16 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
+from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("Salsa_Festival.urls")),
-    path("", include("authentication.urls")),
+    path('', include('Salsa_Festival.urls')),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
