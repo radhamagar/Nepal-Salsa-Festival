@@ -16,7 +16,9 @@
 <body>
   <nav>
     <div class="logo center">
+        <a href="{% url 'home' %}">
       <img src="{% static 'images/home/logo.png' %}" />
+        </a>
     </div>
 
     <div class="logo_name center">
@@ -30,14 +32,14 @@
     <div class="container hidden">
       <div class="nav-links-container">
         <ul class="nav-links">
-          <li class="nav-link"><a href="#">Home</a></li>
-          <li class="nav-link"><a href="signin">Log In</a></li>
+          <li class="nav-link"><a href="{% url 'home' %}">Home</a></li>
+          <li class="nav-link"><a href="{% url 'signin' %}">Log In</a></li>
           <li class="nav-link"><a href="#">Events</a></li>
-          <li class="nav-link"><a href="#">Schedule</a></li>
+          <li class="nav-link"><a href="{% url 'schedule' %}">Schedule</a></li>
           <li class="nav-link"><a href="#">Participate</a></li>
           <li class="nav-link"><a href="#">Past Events</a></li>
           <li class="nav-link"><a href="#">About Us</a></li>
-          <li class="nav-link"><a href="#">Contact Us</a></li>
+          <li class="nav-link"><a href="{% url 'contact' %}">Contact Us</a></li>
         </ul>
         <span class="close-btn">X</span>
       </div>

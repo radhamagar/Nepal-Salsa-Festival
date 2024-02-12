@@ -1,0 +1,32 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Nepal Salsa Festival | Contact Us
+{% endblock title%}
+
+{% block content%}
+<section class="section-contact">
+    <div class="contact-body">
+        <div class="row">
+            <div class="column">
+                <img src="{% static 'images/contact/contact_hero.png' %}" />
+            </div>
+
+            <div class="column flex-column">
+                <div>
+                    <h2 class="contact-title">Contact Us</h2>
+                    <p>We can't wait to celebrate with you.</p>
+                </div>
+
+                <p>For general inquiries, concerns, comments please contact :</p>
+
+                <div>
+                    <span>info@nepalsalsafestival.com</span>
+                    <span>9875263102</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content%}

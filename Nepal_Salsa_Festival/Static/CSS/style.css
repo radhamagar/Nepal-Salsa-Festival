@@ -11,6 +11,11 @@
     box-sizing: border-box;
 }
 
+/* Layout */
+.flex-column {
+    flex-direction: column;
+}
+
 nav {
     display: flex;
     flex-direction: row;
@@ -223,4 +228,79 @@ nav {
 
 .copyright h2 {
     font-size: 1.5rem;
+}
+
+.column {
+    display: flex;
+    column-gap: 15px;
+}
+
+.contact-body .row:nth-child(1) img{
+    max-width: 840px;
+}
+
+.contact-body h2 {
+    font-family: var(--primary-font);
+    font-size: 6rem;
+}
+
+.row {
+    display: flex;
+}
+
+.contact-body .row {
+    align-items: center;
+    padding: 1% 4%;
+    column-gap: 24px;
+}
+
+.contact-body .row .column:nth-child(2){
+    text-align: center;
+}
+
+.contact-body .row .column:nth-child(2) {
+    font-size: 1.5rem;
+    row-gap: 3rem;
+}
+
+.contact-body .row .column:nth-child(2) div:nth-child(3) {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+}
+
+.section-schedule {
+    padding: 2% 0 5% 0;
+}
+
+.event-timing {
+    display: flex;
+    flex-direction: column;
+    row-gap: 25px;
+}
+
+.section-schedule h1{
+    font-size: 6rem;
+    font-family: var(--primary-font);
+    text-align: center;
+    width: 100%;
+}
+
+.section-schedule .column:nth-child(2) {
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+.event-timing p {
+    display: flex;
+    column-gap: 25px;
+    align-items: center;
+}
+
+.event-timing .line{
+    height: 1px;
+    border: 1px solid var(--primary-color);
+    width: 458px;
+    display: block;
 }
