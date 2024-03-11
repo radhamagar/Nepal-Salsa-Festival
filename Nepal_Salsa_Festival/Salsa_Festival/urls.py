@@ -7,5 +7,10 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('contact', views.contact, name='contact'),
     path('schedule', views.schedule, name='schedule'),
-    path('', include('authentication.urls'))
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('about', views.about, name='about'),
+    path('tickets/<int:id>/', views.tickets, name='tickets'),
+    path('payment/<int:id>/', views.payment, name='payment'),
+    path('khalti_gateway', views.khalti_gateway, name='khalti_gateway'),
+    path('', include('authentication.urls')),
+    path('', include('festivals.urls')),
+]

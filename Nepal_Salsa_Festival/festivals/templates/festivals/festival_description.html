@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Nepal Salsa Festival | Festival Details
+{% endblock %}
+
+{% block content %}
+<section class="festival-details-section">
+    <div class="flex-container festival-hero">
+        <figure>
+            <img src="/media/{{festival.feature_image}}" alt="{{festival.name}}">
+        </figure>
+
+        <div class="text-content">
+            <h1 class="text-center">{{festival.name}}</h1>
+            <p>
+            {{festival.description}}
+            </p>
+        </div>
+    </div>
+
+    <div class="past-description-div">
+        <p>
+        {{festival.past_description}}
+        </p>
+    </div>
+
+    <div class="festival-photos-div">
+        <h2 class="text-center">Photo Gallery</h2>
+        <div class="flex-container">
+        {% for image in images %}
+            <img src="/media/{{image.image}}" alt={{image.image_title}} />
+        {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

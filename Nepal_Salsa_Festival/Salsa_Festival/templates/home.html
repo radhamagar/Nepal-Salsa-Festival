@@ -1,22 +1,22 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% load static %}
-{% block title %}Nepal Salsa Festical | Home {% endblock title %} 
+{% block title %}Nepal Salsa Festical | Home {% endblock title %}
 
 {% block content %}
 <div class="content-wrapper center">
   <div class="content-body">
     <div class="content-img">
-      <img src="{% static 'images/home/Home_salsa.png' %}" alt="Content Img" />
+        <img src="/media/{{next_festival.feature_image}}" alt="{{next_festival.name}}" />
     </div>
 
     <div class="content-text">
       <div>
         <h2>Save The Date</h2>
         <div class="line"></div>
-        <p>Durbar Marg, Kathmandu</p>
-        <p>December 1, 2023</p>
+        <p>{{next_festival.location}}</p>
+        <p>{{next_festival.date_time}}</p>
       </div>
-      <a class="btn-primary">Buy Tickets</a>
+      <a href="{% url 'tickets' next_festival.id %}" class="btn-primary">Buy Tickets</a>
     </div>
   </div>
 </div>

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Nepal Salsa Festical | Home {% endblock title %}
+
+{% block content %}
+<div class="content-wrapper center">
+  <div class="content-body">
+    <div class="content-img">
+        <img src="/media/{{next_festival.feature_image}}" alt="{{next_festival.name}}" />
+    </div>
+
+    <div class="content-text">
+      <div>
+        <h2>Save The Date</h2>
+        <div class="line"></div>
+        <p>{{next_festival.location}}</p>
+        <p>{{next_festival.date}}</p>
+      </div>
+      <a href="{% url 'tickets' next_festival.id %}" class="btn-primary">Buy Tickets</a>
+    </div>
+  </div>
+</div>
+
+<div class="sponsors-section">
+  <div class="home-description">
+    <p>
+      Welcome to the Nepal's Salsa Festival 2023, You will have an amazing
+      opportunity to join the Nepal's Salsa Festival and supporting diversity
+      and promoting the salsa culture in the Nepal. Our festival is the only
+      festival offering throughout the city. The festival offers live music,
+      Stellar entertainment, delicious food on Saturday.
+    </p>
+  </div>
+
+  <h2>Sponsors</h2>
+  <div class="sponsor-imgs">
+    <img src="{% static 'images/home/Sponsor 1.png' %}" alt="Sponsor 1" />
+    <img src="{% static 'images/home/Sponsor 2.png' %}" alt="Sponsor 2" />
+    <img src="{% static 'images/home/Sponsor 3.png' %}" alt="Sponsor 3" />
+    <img src="{% static 'images/home/Sponsor 4.png' %}" alt="Sponsor 4" />
+  </div>
+</div>
+{% endblock content %}

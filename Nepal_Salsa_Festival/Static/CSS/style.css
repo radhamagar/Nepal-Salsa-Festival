@@ -2,7 +2,9 @@
 
 :root {
     --primary-font: 'Galada', cursive;
+    --secondary-font: 'Inter', sans-serif;
     --primary-color: #CC1742;
+    --h1: 6rem;
 }
 
 * {
@@ -11,9 +13,36 @@
     box-sizing: border-box;
 }
 
+/*
+section {
+    padding: 1% 4%;;
+}
+*/
+
+a {
+    text-decoration: none;
+}
+
+.separator {
+    width: 2px;
+    height: 100%;
+    background-color: white;
+    display: inline-block;
+}
+
 /* Layout */
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .flex-column {
     flex-direction: column;
+}
+
+.text-center {
+    text-align: center;
 }
 
 nav {
@@ -40,10 +69,17 @@ nav {
     color: #CC1742;
 }
 
+.nav-link {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+
 .hidden {
     display: none !important;
 }
 
+.relative,
 .container {
     position: relative;
 }
@@ -70,6 +106,7 @@ nav {
     width: 100%;
     top: 0;
     left: 0;
+    z-index: 99;
 }
 
 .nav-links {
@@ -138,21 +175,21 @@ nav {
 
 .content-text p {
     font-size: 1.5rem;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--secondary-font);
     color: #ffffff;
     line-height: 1.5;
 }
 
 .content-text .btn-primary {
     font-size: 1.5rem;
-    width: 150px;
+    width: fit-content;
     border-radius: 25.74px;
-    padding: 20px 5px;
+    padding: 20px 30px;
     background-color: #c70039;
     color: white;
     border-color: white;
     text-align: center;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--secondary-font);
 }
 
 .btn {
@@ -179,7 +216,7 @@ nav {
 
 .home-description {
     font-size: 2.5rem;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--secondary-font);
     text-align: center;
     padding: 5% 10.5%;
     font-weight: 300;
@@ -206,7 +243,7 @@ nav {
 
 .footer {
     display: flex;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--secondary-font);
     justify-content: space-between;
     background-color: #CC1742;
     padding: 2% 5%;
@@ -217,7 +254,11 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    column-gap: 10px;
+    column-gap: 26px;
+}
+
+.social-links a {
+    color: #fff;
 }
 
 .social-links img {
@@ -235,7 +276,7 @@ nav {
     column-gap: 15px;
 }
 
-.contact-body .row:nth-child(1) img{
+.contact-body .row:nth-child(1) img {
     max-width: 840px;
 }
 
@@ -250,11 +291,11 @@ nav {
 
 .contact-body .row {
     align-items: center;
-    padding: 1% 4%;
     column-gap: 24px;
+    padding: 1% 4%;
 }
 
-.contact-body .row .column:nth-child(2){
+.contact-body .row .column:nth-child(2) {
     text-align: center;
 }
 
@@ -279,8 +320,8 @@ nav {
     row-gap: 25px;
 }
 
-.section-schedule h1{
-    font-size: 6rem;
+.section-schedule h1 {
+    font-size: var(--h1);
     font-family: var(--primary-font);
     text-align: center;
     width: 100%;
@@ -298,9 +339,360 @@ nav {
     align-items: center;
 }
 
-.event-timing .line{
+.event-timing .line {
     height: 1px;
     border: 1px solid var(--primary-color);
     width: 458px;
     display: block;
+}
+
+/* About Page */
+.about-section .hero {
+    padding-top: 0;
+    padding-bottom: 4%;
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+.hero .flex-container {
+    column-gap: 50px;
+}
+
+.hero img {
+    width: fit-content;
+}
+
+.hero h1 {
+    font-size: var(--h1);
+    font-family: var(--primary-font);
+    font-weight: 500;
+}
+
+.hero .text-content p {
+    font-family: var(--secondary-font);
+    font-weight: 200;
+    font-size: 2.25rem;
+}
+
+.history,
+.goals {
+    background-color: #000;
+    padding: 5%;
+    margin-bottom: 5%;
+}
+
+.content h2 {
+    font-size: var(--h1);
+    font-family: var(--primary-font);
+    color: var(--primary-color);
+}
+
+.content p {
+    color: #fff;
+    font-family: var(--secondary-font);
+    font-size: 2.25rem;
+    font-weight: 400;
+}
+
+.about-images,
+.about-images .row {
+    gap: 26px;
+}
+
+.about-images {
+    margin-bottom: 5%;
+}
+
+/* Tickets Page */
+.tickets {
+    padding: 1% 4%;
+    margin-bottom: 5%;
+}
+
+.ticket-hero {
+    overflow: hidden;
+}
+
+.ticket-section .hero-text {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%);
+    width: 100%;
+}
+
+.ticket-section .hero-text h1 {
+    text-align: center;
+    font-size: var(--h1);
+    font-family: var(--primary-font);
+    color: var(--primary-color);
+}
+
+.ticket-section .hero-text p {
+    color: #fff;
+    text-align: center;
+    font-family: var(--secondary-font);
+    font-size: 2rem;
+}
+
+.time-location {
+    margin: 5% 0;
+}
+
+.time-location h2,
+.tickets h2 {
+    font-size: var(--h1);
+    font-family: var(--primary-font);
+    font-weight: 400;
+}
+
+.time-location p {
+    font-size: 2rem;
+    font-family: var(--secondary-font);
+    font-weight: 200;
+}
+
+.tickets table {
+    text-align: center;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.tickets thead {
+    display: flex;
+    justify-content: center;
+}
+
+.tickets tr {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.tickets tbody {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.tickets th,
+.tickets td {
+    font-family: var(--secondary-font);
+    font-size: 2rem;
+    font-weight: 400;
+    padding: 25px 50px;
+    width: 20%;
+    font-family: var(--secondary-font);
+    font-size: 2rem;
+    font-weight: 400;
+    padding: 25px 10px;
+    width: 20%;
+}
+
+.tickets th {
+    background-color: #F46E8E;
+    color: #fff;
+}
+
+.tickets input[type="number"] {
+    height: 66px;
+    background-color: #D9D9D9;
+    border: none;
+    font-family: var(--secondary-font);
+    font-weight: 600;
+    font-size: 2rem;
+    width: 75%;
+    padding-left: 35%;
+    outline: none;
+}
+
+.tickets input::-webkit-outer-spin-button,
+.tickets input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.tickets input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.tickets button {
+    padding: 25px 75px;
+    border: none;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Payment Section */
+.payment-section>* {
+    margin-bottom: 5%;
+}
+
+.order-summary {
+    width: fit-content;
+    margin: 0 auto 5% auto;
+}
+
+.order-summary>* {
+    margin-bottom: 15px;
+}
+
+.order-summary h1 {
+    font-family: var(--primary-font);
+    font-weight: 400;
+    font-size: var(--h1);
+}
+
+.order-summary p {
+    font-family: var(--secondary-font);
+    font-size: 2rem;
+    font-weight: 200;
+}
+
+.order-summary .row {
+    justify-content: space-between;
+    font-family: var(--secondary-font);
+    font-size: 2rem;
+    font-weight: 300;
+}
+
+.order-summary .row .col:nth-child(2) h3 {
+    color: var(--primary-color);
+}
+
+.payment-options h2 {
+    font-family: var(--primary-font);
+    font-size: var(--h1);
+    font-weight: 300;
+}
+
+/* Festivals Section */
+.festival-section .images-div {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.festival-images div.flex-container {
+    justify-content: center;
+    column-gap: 100px;
+    flex-wrap: wrap;
+}
+
+.festival-images img {
+    height: 526px;
+    width: 526px;
+    object-fit: cover;
+}
+
+.festival-images figure>* {
+    margin-bottom: 15px;
+}
+
+.festival-images figure figcaption {
+    font-family: var(--secondary-font);
+    font-weight: 400;
+    font-size: 1.5rem;
+}
+
+.festival-section h1,
+.festival-images h1 {
+    font-family: var(--primary-font);
+    font-size: var(--h1);
+    width: fit-content;
+    margin: 2% auto;
+    color: var(--primary-color);
+    border-radius: 26px;
+    padding: 0 50px;
+    border: 1px solid var(--primary-color);
+}
+
+/* Festival Description */
+.festival-details-section .festival-hero {
+    padding: 1% 4%;
+    column-gap: 25px;
+}
+
+.festival-hero img {
+    height: 786px;
+    width: 547px;
+    object-fit: cover;
+}
+
+.festival-hero .text-content {
+    width: 100%;
+}
+
+.festival-hero .text-content h1 {
+    font-size: var(--h1);
+    font-family: var(--primary-font);
+}
+
+.festival-hero .text-content p {
+    font-family: var(--secondary-font);
+    font-size: 2rem;
+}
+
+.past-description-div {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 10% 5%;
+}
+
+.past-description-div p {
+    font-family: var(--secondary-font);
+    font-size: 2.25rem;
+    font-weight: 400;
+}
+
+.festival-photos-div>div {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    margin: 5% 0;
+}
+
+.festival-photos-div h2 {
+    font-family: var(--primary-font);
+    color: var(--primary-color);
+    font-size: var(--h1);
+    background-color: black;
+    padding: 25px 50px;
+    width: fit-content;
+    margin: 3% auto;
+    border-radius: 32px;
+}
+
+.festival-photos-div img {
+    height: 385px;
+    width: 526px;
+}
+
+/* Success */
+.section-success {
+    height: 54vw;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+.section-success h1 {
+    font-family: var(--primary-font);
+    font-weight: 400;
+    padding: 3% 0;
+    color: green;
+    font-size: 3rem;
+}
+
+.section-success p {
+    font-family: var(--secondary-font);
+    font-size: 1.5rem;
+    color: var(--primary-color);
 }

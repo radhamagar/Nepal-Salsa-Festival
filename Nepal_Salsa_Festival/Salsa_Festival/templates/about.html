@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Nepal Salsa Festival | About Us
+{% endblock %}
+
+{% block content %}
+<section class="about-section">
+    <div class="hero">
+        <div class="flex-container">
+            <figure>
+                <img src="{% static 'images/about/about-main.png' %}" alt="" />
+            </figure>
+
+            <div class="text-content">
+                <h1>Learn More About Us</h1>
+                <p>The Nepal Salsa Festival was established as a non-profit organization to act as the festival’s
+                    umbrella</p>
+            </div>
+        </div>
+    </div>
+    <div class="flex-container history">
+        <div class="content text-center">
+            <h2>History</h2>
+            <p>In 2022, First Salsa Festival took place.It functioned as a means of bringing together different human
+                service organizations, business, and other community organization that had made an effort to engage with
+                salsa Dance. Local entertainers and artists had the opportunity to showcase their skills. Hundreds of
+                people attended the festival, which was joyful, educational, amusing and enriching regardless of age,
+                gender, race or ethnicity. The Nepal Salsa Festival community felt a feeling of ethnic pride and
+                accomplishment as a result of this event.</p>
+        </div>
+    </div>
+    <div class="flex-container goals">
+        <div class="content text-center">
+            <h2>Goals</h2>
+            <p>The main goal of Nepal Salsa Festival is to flourish and grow the salsa enthusiasts in the community. Our
+                goal are listed below:
+                To highlight how distinctive our culture is by showcasing how the salsa community is a diverse community
+                within a diverse community.
+                Offering a family friendly event that teaches people about nation via dancing, music, and food from
+                around the country.
+            </p>
+        </div>
+    </div>
+
+    <div class="flex-container flex-column about-images">
+        <div class="row">
+            <img src="{% static 'images/about/T1 1.png'%}" alt="" />
+            <img src="{% static 'images/about/T2 1.png'%}" alt="" />
+            <img src="{% static 'images/about/T4 1.png'%}" alt="" />
+            <img src="{% static 'images/about/T5 1.png'%}" alt="" />
+        </div>
+
+        <div class="row">
+            <img src="{% static 'images/about/T6 2.png'%}" alt="" />
+            <img src="{% static 'images/about/T7 1.png'%}" alt="" />
+            <img src="{% static 'images/about/T8 1.png'%}" alt="" />
+            <img src="{% static 'images/about/T9 1.png'%}" alt="" />
+        </div>
+    </div>
+</section>
+{% endblock %}

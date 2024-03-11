@@ -3,17 +3,19 @@
 {% block title %}Nepal Salsa Festival | Sign Up{% endblock title %}
 
 {% block content %}
-<link href="{% static 'authentication/main.css' %}" rel="stylesheet" />
+<link href="{% static "authentication/main.css" %}" rel="stylesheet" />
 <div class="form_container">
     <div class="row">
-        <div class="column">
+        <div class="column flex-column">
             <h1>Welcome!</h1>
-            <p>Already Have an Account?</p>
+            <div class="separator"></div>
+            <p>Already Have and Account?</p>
             <a href="signin" class="btn">Sign In</a>
         </div>
         <div class="column">
             <form method="post" action="">
                 {% csrf_token %}
+
                 <div class="form-group">
                     <div class="form-field">
                         <label for="{{ form.first_name.id_for_label  }}">{{ form.first_name.label }}</label>
@@ -41,10 +43,9 @@
                 </div>
 
                 <div class="form-field">
-                    <label for="{{ form.c_password.id_for_label  }}">{{ form.c_password.label }}</label>
-                    {{form.c_password}}
+                    <label for="{{ form.confirm_password.id_for_label  }}">{{ form.confirm_password.label }}</label>
+                    {{form.confirm_password}}
                 </div>
-
                 <button class="btn no-border" type="submit" name="signup">Sign Up</button>
             </form>
         </div>

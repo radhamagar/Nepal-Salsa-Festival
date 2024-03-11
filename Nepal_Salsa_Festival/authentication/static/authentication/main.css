@@ -1,7 +1,6 @@
 .no-border {
     border: none;
 }
-
 .form_container {
     display: flex;
     align-items: center;
@@ -26,7 +25,6 @@
 
 .column:nth-child(2) {
     padding: 8.3rem 4.5rem;
-
 }
 
 .column h1 {
@@ -42,7 +40,8 @@
     line-height: 2;
 }
 
-.separator {
+.form_container .separator {
+    width: 100%;
     border: 3px solid white;
     border-radius: 5px;
 }

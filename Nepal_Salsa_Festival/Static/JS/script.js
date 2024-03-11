@@ -18,3 +18,4 @@ bars.addEventListener("click", ()=>{
 close_btn.addEventListener("click", ()=>{
     toggleHide(menu)   
 });
+

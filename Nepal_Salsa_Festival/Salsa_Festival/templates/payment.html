@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Nepal Salsa Festival | Payment
+{% endblock %}
+
+{% block content %}
+<section class="payment-section">
+    <div class="order-summary text-center">
+        <h1>Order Summary</h1>
+        <p>Subtotal ({{ticket_count}} Tickets)</p>
+        <div class="row">
+            <div class="col">
+                <h3>Total Amount</h3>
+            </div>
+            <div class="col">
+                <h3>Rs. {{total_amount}}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="payment-options text-center">
+            {% csrf_token %}
+            <h2>Select The Payment Method</h2>
+            <a href="{% url 'khalti_gateway' %}">
+                <img src="{% static 'images/payment/khalti.png' %}" alt="Khalti" />
+            </a>
+    </div>
+</section>
+{% endblock %}

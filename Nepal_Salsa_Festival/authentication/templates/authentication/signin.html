@@ -5,10 +5,10 @@
 
 {% block content %}
 
-<link href="{% static '/authentication/main.css' %}" rel="stylesheet" />
+<link href="{% static "/authentication/main.css" %}" rel="stylesheet" />
 <div class="form_container">
     <div class="row">
-        <div class="column">
+        <div class="column flex-column">
             <h1>Welcome!</h1>
             <div class="separator"></div>
             <p>Create an account</p>
@@ -21,6 +21,8 @@
                 <div class="form-field">
                     <label for="{{ field.id_for_label  }}">{{ field.label }}</label>
                     {{ field}}
+                </div>
+                <div class="form-errors">
                 </div>
                 {% endfor %}
                 <button class="btn no-border"  type="submit" name="signin">Sign In</button>
