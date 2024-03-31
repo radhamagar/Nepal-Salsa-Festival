@@ -37,6 +37,11 @@ a {
     align-items: center;
 }
 
+.grid-container {
+    display: grid;
+    align-items: center;
+}
+
 .flex-column {
     flex-direction: column;
 }
@@ -190,6 +195,7 @@ nav {
     border-color: white;
     text-align: center;
     font-family: var(--secondary-font);
+    background-image: unset;
 }
 
 .btn {
@@ -526,6 +532,7 @@ nav {
     width: fit-content;
     margin-left: auto;
     margin-right: auto;
+    background-image: unset;
 }
 
 /* Payment Section */
@@ -675,18 +682,15 @@ nav {
 
 /* Success */
 .section-success {
-    height: 54vw;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
+    height: 60vh;
+    width: 45vw;
+    margin: 10% auto;
 }
 
 .section-success h1 {
     font-family: var(--primary-font);
     font-weight: 400;
-    padding: 3% 0;
+    text-align: center;
     color: green;
     font-size: 3rem;
 }
@@ -695,4 +699,98 @@ nav {
     font-family: var(--secondary-font);
     font-size: 1.5rem;
     color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.order-wrapper {
+    text-align: left;
+    margin: 5% 0;
+}
+
+.order-wrapper p {
+    color: black;
+    border-bottom: 2px solid var(--primary-color);
+    width: fit-content;
+}
+
+.order-wrapper td {
+    width: 100% !important;
+    font-size: 1.5rem !important;
+    margin: 2% 5%;
+}
+
+.errorlist {
+    color: red;
+    list-style: none;
+    margin: 2% 0;
+    font-size: 1rem;
+}
+
+#participate {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    padding: 1% 15%;
+    height: 80vh;
+}
+
+#participate>* {
+    margin-bottom: 3%;
+}
+
+#participate p {
+    font-family: var(--secondary-font);
+    font-size: 1.75rem;
+    line-height: 1.5;
+}
+
+#participate h1 {
+    font-family: var(--primary-font);
+    font-size: 5rem;
+    text-align: center;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+#participate button {
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2% 15%;
+}
+
+#events {
+    text-align: center;
+    padding: 3% 7%;
+    margin: 2% 0;
+}
+
+#events>* {
+    margin-bottom: 15px;
+}
+
+#events h1 {
+    font-family: var(--primary-font);
+    font-size: 3rem;
+    line-height: 1.5;
+}
+
+#events .card {
+    overflow: hidden;
+}
+
+#events .card img {
+    height: 500px;
+    width: 500px;
+}
+
+#events .card figcaption {
+    font-family: var(--secondary-font);
+    font-size: 1.5rem;
+    line-height: 1.5;
+}
+
+#events .grid-container {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 25px;
 }

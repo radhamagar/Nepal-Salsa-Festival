@@ -6,28 +6,11 @@ from django.forms import modelformset_factory
 import json
 import requests
 from django.http import HttpResponse
+from django.core.mail import send_mail
 
 # Create your views here.
 def festivals(request):
     image_form_set = modelformset_factory(model=Festival, form=FestivalForm, extra=10)
-
-#    if (request.method == "POST"):
-#        festival_form = FestivalForm(request.POST)
-#        form_set = image_form_set(request.POST, request.FILES, queryset=FestivalImages.objects.none())
-#
-#        if (festival_form.is_valid() and form_set.is_valid()):
-#            festival_form = festival_form.save(commit=False)
-#            festival_form.user = request.user
-#            festival_form.save()
-#
-#            for form in form_set.cleaned_data:
-#                if form:
-#                    image = form["image"]
-#                    photo = FestivalImages(festival_form, image)
-#                    photo.save()
-#            return redirect("/")
-#        else:
-#            print(festival_form.errors, formset.errors)
 
     festival_images = {}
 
@@ -67,6 +50,44 @@ def festival_description(request, id):
     return render(request, "festivals/festival_description.html", context)
 
 def success(request):
-    context = {}
-    return render(request, "success.html", context)
+    if (not request.user.is_anonymous):
+        tickets_session = request.session.get("tickets")
+        ticket_keys = list(tickets_session.keys())
+        order = Order()
+        user = request.user
+        festival_id = request.GET["festival"]
+        print(festival_id)
+        order.user = SiteUser.objects.get(id=user.id)
+        festival = Festival.objects.get(id=festival_id)
+        order.festival = festival
+        order.shipping_address = "Gaushala, Kathmandu"
+
+        tickets = Ticket.objects.filter(festival_id=festival_id)
+
+        for ticket in tickets:
+            if ticket.ticket_type in ticket_keys:
+                instance = TicketAmount()
+                instance.ticket = ticket
+                instance.count = tickets_session[ticket.ticket_type]["amount"]
+                instance.save()
+                order.save()
+                order.ticket_amounts.add(instance)
+
+        context = {
+            "order" : order,
+            "tickets" : tickets_session
+        }
+
+        subject = 'Thank You For Purchasing The Tickets'
+        message = f'''
+            We will be happy to meet you at the venue!
+        '''
+        sender_email = 'radhabudhamagar8@gmail.com'
+        recipient_list = ['radhabudhamagar8@gmail.com']
+
+        send_mail(subject, message, sender_email, recipient_list)
+
+        return render(request, "success.html", context)
+    else:
+        return  HttpResponse("You are not authenticated.")
 

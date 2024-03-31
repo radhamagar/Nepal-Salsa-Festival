@@ -18,13 +18,14 @@
             <form method="post" action="">
                 {% csrf_token %}
                 {% for field in form%}
-                <div class="form-field">
-                    <label for="{{ field.id_for_label  }}">{{ field.label }}</label>
-                    {{ field}}
-                </div>
-                <div class="form-errors">
-                </div>
+                    <div class="form-field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+
+                    {{ field.errors }}
                 {% endfor %}
+                <a href="{% url 'lost_password' %}">Forget Password? Click Here To Change</a>
                 <button class="btn no-border"  type="submit" name="signin">Sign In</button>
             </form>
         </div>

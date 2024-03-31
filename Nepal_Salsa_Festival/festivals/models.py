@@ -67,14 +67,21 @@ class Ticket(models.Model):
     festival = models.ForeignKey(to=Festival, on_delete=models.CASCADE)
     ticket_type = models.CharField(max_length=255, default="Regular")
     price = models.PositiveIntegerField(default=0)
+    max_amount = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.festival.user.first_name
 
-class Bill(models.Model):
-    ticket_count = models.PositiveIntegerField(default=0)
-    total_amount = models.PositiveIntegerField(default=0)
+class TicketAmount(models.Model):
+    ticket = models.ForeignKey(to=Ticket, on_delete=models.CASCADE)
+    count = models.PositiveIntegerField(default=0)
 
-class BillUser(models.Model):
-    user = models.ForeignKey(to=SiteUser, default=1, on_delete=models.CASCADE)
-    bill = models.ForeignKey(to=Bill, default=1, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.ticket.ticket_type
+
+class Order(models.Model):
+    user = models.ForeignKey(SiteUser, on_delete=models.CASCADE)
+    ticket_amounts = models.ManyToManyField(to=TicketAmount, related_name="orders")
+
+    def __str__(self):
+        return self.user.email;

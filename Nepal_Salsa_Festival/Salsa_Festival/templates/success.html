@@ -5,8 +5,24 @@ Nepal Salsa Festival | Success
 {% endblock %}
 
 {% block content %}
-<section class="section-success text-center">
-    <h1>Thank You For Purchasing The Tickets!</h1>
-    <p>We'll be happy to have you at the venue</p>
+<section class="section-success">
+    <h1 class"text-center">Thank You, {{ order.user.first_name}} {{order.user.last_name}}</h1>
+    <p>You've sucessfully purchased the tickets!</p>
+    <p>See you during the {{order.festival.name}} at {{order.festival.location}} on {{order.festival.date_time|date}}!!</p>
+    <p>Here's Your Order</p>
+
+    <div class="order-wrapper">
+        <p>Tickets:</p>
+        <table>
+            <tbody>
+            {% for key, value in tickets.items %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td>{{ value.amount}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </section>
 {% endblock %}

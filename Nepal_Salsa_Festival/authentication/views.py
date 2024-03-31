@@ -3,6 +3,7 @@ from django.urls import reverse
 from .forms import LoginForm, RegisterForm
 from .models import SiteUser
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import make_password
 
 # Create your views here.
 def signin(request):
@@ -10,13 +11,10 @@ def signin(request):
 
     if (request.method == "POST"):
         form = LoginForm(request.POST)
-
         if(form.is_valid()):
             email = form.cleaned_data["email"]
             password = form.cleaned_data["password"]
             user = authenticate(request, email=email, password=password)
-            print(authenticate(request, email=email, password=password))
-
             if (user is not None):
                 login(request, user)
                 return redirect(reverse('home'))
@@ -33,10 +31,38 @@ def signup(request):
             form.save()
             return redirect(reverse('home'))
         else:
-            print("Invalid")
+            print(form)
 
     context = {'form' : form}
     return render(request, 'authentication/signup.html', context)
+
+def lost_password(request):
+    if(request.method == "POST"):
+        email = request.POST["email"]
+        print(request.POST)
+        try:
+            user = SiteUser.objects.get(email=email)
+            password = request.POST["password"]
+            c_password = request.POST["c_password"]
+
+            if (password == c_password and password != ""):
+                user.password = make_password(password)
+                user.save()
+                return redirect(reverse("signin"))
+        except:
+            context = {
+                "error" : "You Don't Have A User Registered With This Email, Check Again.."
+            }
+            return render(request, 'authentication/lost_password.html', context)
+        context = {
+            "user" : user
+        }
+        return render(request, 'authentication/lost_password.html', context)
+
+    context = {
+    }
+    return render(request, 'authentication/lost_password.html', context)
+
 
 def logout_view(request):
     logout(request)

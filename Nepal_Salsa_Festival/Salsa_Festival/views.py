@@ -1,18 +1,19 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.shortcuts import redirect
-from festivals.models import Festival, Ticket, Bill
+from festivals.models import Festival, Ticket, TicketAmount
 from django.utils.text import slugify
 from authentication.models import SiteUser
 import json
 import requests
 from django.forms.models import model_to_dict
+from django.utils import timezone
 
 # Create your views here.
 def home(request):
     next_festival = Festival.objects.get(is_next=True)
     is_authenticated = False
-    if(request.user.is_authenticated):
+    if(request.user.is_authenticated and not request.user.is_superuser):
         is_authenticated = request.user.is_authenticated
 
     context = {
@@ -28,6 +29,19 @@ def contact(request):
 def schedule(request):
     context = {}
     return render(request, "schedule.html", context)
+
+def participate(request):
+    context = {}
+    return render(request, "participate.html", context)
+
+def events(request):
+    now = timezone.now()
+    upcoming_events = Festival.objects.filter(date_time__gt=now)
+    context = {
+        "upcoming_events" : upcoming_events
+    }
+
+    return render(request, "events.html", context)
 
 def about(request):
     context = {}
@@ -45,8 +59,11 @@ def tickets(request, id):
 def payment(request, id):
     tickets = Ticket.objects.filter(festival__id=id)
     festival = Festival.objects.get(id=id)
+
     ticket_count = 0
     total_amount = 0
+
+    tickets_dict = {}
 
     for ticket in tickets:
         if ticket.ticket_type == request.POST[slugify(ticket.ticket_type)]:
@@ -54,51 +71,60 @@ def payment(request, id):
             ticket_total = ticket_amount * int(request.POST[f'{slugify(ticket.ticket_type)}-price'])
             ticket_count += ticket_amount
             total_amount += ticket_total
-
+            tickets_dict[ticket.ticket_type] = {"amount" : ticket_amount, "price" : ticket.price}
 
     context = {
+        "festival_id" : id,
         "ticket_count" : ticket_count,
-        "total_amount" : total_amount
+        "total_amount" : total_amount,
+        "tickets" : tickets_dict
     }
+
+    request.session["tickets"] = tickets_dict
 
     return render(request, "payment.html", context)
 
-def khalti_gateway(request):
+def khalti_gateway(request, id):
+    user = request.user;
+    try:
+        if not user.is_superuser:
+            full_name = f"{user.first_name} {user.last_name}"
+            email = user.email
+            phone = user.ph_number
+            if(user.is_authenticated):
+                url = "https://a.khalti.com/api/v2/epayment/initiate/"
+                payload = json.dumps({
+                    "return_url": f"http://localhost:8000/success?festival={id}&",
+                    "website_url": "http://localhost:8000/",
+                    "amount": f"{10*100}",
 
+                    "purchase_order_id": "Order01",
+                    "purchase_order_name": "test",
 
-    if(request.user.is_authenticated):
-        user = request.user
-        full_name = f"{user.first_name if user.first_name else ''} {user.last_name if user.last_name else ''}"
-        email = user.email
-        phone = user.ph_number
+                    "customer_info": {
+                    "name": full_name,
+                    "email": email,
+                    "phone": phone,
+                    }
+                })
 
-        url = "https://a.khalti.com/api/v2/epayment/initiate/"
-        payload = json.dumps({
-            "return_url": "http://localhost:8000/success",
-            "website_url": "http://localhost:8000/",
-            "amount": f"{10*100}",
+                headers = {
+                    'Authorization': 'key 014f460ba3534c4aa4ed3102583413f4',
+                    'Content-Type': 'application/json',
+                }
 
-            "purchase_order_id": "Order01",
-            "purchase_order_name": "test",
+                response = requests.request("POST", url, headers=headers, data=payload)
+                payment_url = json.loads(response.text)["payment_url"];
 
-            "customer_info": {
-            "name": full_name,
-            "email": email,
-            "phone": phone,
-            }
-        })
-
-        headers = {
-            'Authorization': 'key 014f460ba3534c4aa4ed3102583413f4',
-            'Content-Type': 'application/json',
-        }
-
-        response = requests.request("POST", url, headers=headers, data=payload)
-        payment_url = json.loads(response.text)
-
-        if(response.status_code == 200):
-            return redirect(payment_url["payment_url"]);
+                if(response.status_code == 200):
+                    return redirect(payment_url);
+                else:
+                    return HttpResponse(response.text)
+            else:
+                return redirect("signin")
         else:
-            return HttpResponse(response.text)
-    else:
-        return redirect("signin")
+            return redirect("signin")
+
+    except:
+        return redirect("signin");
+

@@ -1,29 +1,92 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load mathfilters %}
 
 {% block title %}
 Nepal Salsa Festival | Payment
 {% endblock %}
 
 {% block content %}
+<style>
+    table{
+        border-collapse: collapse;
+        font-size: 1.5rem;
+        font-family: var(--secondary-font);
+    }
+
+    thead{
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    th,
+    td {
+        padding: 15px;
+    }
+
+    thead,
+    tbody,
+    tfoot{
+        border: 2px solid var(--primary-color);
+    }
+
+    tr td:nth-child(n+1):not(:last-child){
+        border-right: 2px solid var(--primary-color);
+    }
+
+    tr th:nth-child(n+1):not(:last-child){
+        border-right: 2px solid var(--primary-color);
+    }
+
+    tr:nth-child(n):not(:last-child){
+        border-bottom: 2px solid var(--primary-color);
+    }
+
+    tfoot {
+        background-color: var(--primary-color);
+        color: white;
+    }
+</style>
 <section class="payment-section">
     <div class="order-summary text-center">
         <h1>Order Summary</h1>
-        <p>Subtotal ({{ticket_count}} Tickets)</p>
-        <div class="row">
-            <div class="col">
-                <h3>Total Amount</h3>
-            </div>
-            <div class="col">
-                <h3>Rs. {{total_amount}}</h3>
-            </div>
-        </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>S.N.</th>
+                        <th>Ticket Type</th>
+                        <th>Amount</th>
+                        <th>Per Price (Rs.)</th>
+                        <th>Total (Rs.)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, value in tickets.items%}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{key}}</td>
+                            <td>{{value.amount}}</td>
+                            <td>{{value.price}}</td>
+                            <td>{{value.amount|mul:value.price}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <th colspan="2">Sub Total</th>
+                        <td>{{ticket_count}}</td>
+                        <td></td>
+                        <td>{{total_amount}}</td>
+                    </tr>
+                </tfoot>
+            </table>
     </div>
 
     <div class="payment-options text-center">
             {% csrf_token %}
             <h2>Select The Payment Method</h2>
-            <a href="{% url 'khalti_gateway' %}">
+            <a href="{% url 'khalti_gateway' festival_id %}">
                 <img src="{% static 'images/payment/khalti.png' %}" alt="Khalti" />
             </a>
     </div>
