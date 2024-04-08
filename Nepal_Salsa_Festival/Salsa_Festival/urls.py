@@ -16,4 +16,5 @@ urlpatterns = [
     path('', include('authentication.urls')),
     path('', include('festivals.urls')),
     path('', include('site_admin.urls')),
+    path('', include('live_streaming.urls')),
 ]

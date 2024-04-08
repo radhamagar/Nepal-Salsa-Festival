@@ -9,11 +9,75 @@
         We’re always expanding and seeking more sponsors and alliances.
         To find out more, contact us.
     </p>
-    <button class="btn btn-primary" type="button">Sponsors</button>
+    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#sponsors">Sponsors</button>
+
+    <div class="modal fade" id="sponsors" tabindex="-1" role="dialog" aria-labelledby="sponsorsTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sponsorsTitle">Sponsors</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Your Email">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="ph_number">Phone Number</label>
+                            <input type="text" class="form-control" id="ph_number" placeholder="Phone Number">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <p>
         We’re always trying to involve as many people as possible.
         Take a look below to apply.
     </p>
-    <button class="btn btn-primary" type="button">Volunteer</button>
+
+    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#volunteers">Volunteer</button>
+
+    <div class="modal fade" id="volunteers" tabindex="-1" role="dialog" aria-labelledby="volunteersTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="volunteersTitle">Sponsors</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Your Email">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="ph_number">Phone Number</label>
+                            <input type="text" class="form-control" id="ph_number" placeholder="Phone Number">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 {% endblock %}

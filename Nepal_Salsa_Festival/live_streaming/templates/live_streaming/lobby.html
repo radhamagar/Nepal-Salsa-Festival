@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+Nepal Salsa Festival | Lobby
+{% endblock %}
+
+{% block content %}
+<link href="{% static 'live_streaming/css/lobby.css' %}" rel="stylesheet">
+<div id="form-container">
+    <div id="form__container__header">
+        <p>Enter Your Room ID</p>
+    </div>
+
+    <div id="form__content__wrapper">
+        <form id="join-form">
+            <input type="text" name="join_link" required />
+            <input type="submit" value="Join Room" />
+        </form>
+    </div>
+</div>
+<script>
+    const join_form = document.forms[0];
+    join_form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const roomId = event.target.join_link.value;
+        window.location.href = `/live?room=${roomId}`;
+    })
+</script>
+{% endblock%}

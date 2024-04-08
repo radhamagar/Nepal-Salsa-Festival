@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Nepal Salsa Festval | Live Streaming
+{% endblock title %}
+
+{% block content %}
+<link href="{% static 'live_streaming/css/main.css' %}" rel="stylesheet" type="text/css">
+<section id="live_streaming">
+    <div id="videos">
+        <video class="video-player" id="user-1" autoplay playsinline></video>
+        <video class="video-player" id="user-2" autoplay playsinline></video>
+    </div>
+
+    <div id="controls">
+        <div class="icon-container" id="camera-btn">
+            <img src={% static "live_streaming/icons/camera.png" %} alt="">
+        </div>
+
+        <div class="icon-container" id="mic-btn">
+            <img src={% static "live_streaming/icons/mic.png" %} alt="">
+        </div>
+
+        <div class="icon-container" id="leave-btn">
+            <img src={% static "live_streaming/icons/phone.png" %} alt="">
+        </div>
+    </div>
+</section>
+<script src={% static "live_streaming/js/agora-rtm-sdk-1.5.1.js" %}></script>
+<script src={% static "live_streaming/js/main.js" %}></script>
+{% endblock content %}

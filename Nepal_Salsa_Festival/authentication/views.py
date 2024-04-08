@@ -4,6 +4,7 @@ from .forms import LoginForm, RegisterForm
 from .models import SiteUser
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
+from django.contrib import messages
 
 # Create your views here.
 def signin(request):
@@ -15,8 +16,14 @@ def signin(request):
             email = form.cleaned_data["email"]
             password = form.cleaned_data["password"]
             user = authenticate(request, email=email, password=password)
+
             if (user is not None):
+                if (user.is_superuser):
+                    return redirect("admin/")
+                if (user.is_staff):
+                    return redirect(reverse("site_admin"))
                 login(request, user)
+                messages.success(request, "You're Sucessfully Logged In")
                 return redirect(reverse('home'))
 
     context = {'form' : form}

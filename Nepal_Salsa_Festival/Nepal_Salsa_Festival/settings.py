@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-f-hjhvtj&tm%dzcewfz7qd%4yzx#^qcmo0$@087m82#6amal9_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'authentication.SiteUser'
 
@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
     'festivals.apps.FestivalsConfig',
     'mathfilters',
-    'site_admin.apps.SiteAdminConfig',
+    #'site_admin.apps.SiteAdminConfig',
+    'live_streaming.apps.LiveStreamingConfig'
 ]
 
 MIDDLEWARE = [
@@ -150,3 +151,4 @@ EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS').lower() == 'true'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+

@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load mathfilters %}
 
 {% block title %} Nepal Salsa Festival | Tickets {% endblock%}
+
+{% block style %}
+<style>
+    .container-fluid {
+        overflow: hidden;
+    }
+</style>
+{% endblock style %}
 
 {% block content %}
 <section class="ticket-section">
@@ -26,6 +35,7 @@
                 <thead>
                     <tr>
                         <th>Ticket Types</th>
+                        <th>Available Tickets</th>
                         <th>Price</th>
                         <th>Quantity</th>
                     </tr>
@@ -39,14 +49,19 @@
                             {{ticket.ticket_type}}
                             <input type="hidden" value="{{ticket.ticket_type}}" name="{{ticket.ticket_type|slugify}}" />
                         </td>
+                        <td class="available">
+                            {{ticket.max_no_tickets|sub:ticket.sold_tickets}}
+                            <input type="hidden" value="{{ticket.max_no_tickets|sub:ticket.sold_tickets}}" name="{{ticket.ticket_type|slugify}}-available" />
+                        </td>
                         <td>
                             Rs. {{ticket.price}}
                             <input type="hidden" value="{{ticket.price}}" name="{{ticket.ticket_type|slugify}}-price"/>
+
                         </td>
                         <td class="flex-container">
-                            <i class="fa-solid fa-plus"></i>
-                            <input type="number" name="{{ticket.ticket_type|slugify}}-count" value="0" />
                             <i class="fa-solid fa-minus"></i>
+                            <input type="number" name="{{ticket.ticket_type|slugify}}-count" value="0" style="pointer-events: none;"/>
+                            <i class="fa-solid fa-plus"></i>
                         </td>
                     </tr>
                     {% endfor %}
@@ -59,21 +74,28 @@
 </section>
 
 <script>
-    input_containers = document.querySelectorAll("tr .flex-container");
+    const ticket_rows = document.querySelectorAll("tbody tr");
 
-    input_containers.forEach(container => {
-        add_btn = container.querySelector(".fa-plus");
-        sub_btn = container.querySelector(".fa-minus");
+    ticket_rows.forEach(ticket_row => {
+        let input_container = ticket_row.querySelector("tr .flex-container");
+        let ticket_avalable = Number(ticket_row.querySelector(".available").innerText);
+
+        add_btn = input_container.querySelector(".fa-plus");
+        sub_btn = input_container.querySelector(".fa-minus");
 
         add_btn.addEventListener("click", function(){
-            input_field = container.querySelector("input[type=number]");
+            input_field = input_container.querySelector("input[type=number]");
             current_value = parseInt(input_field.value);
             current_value++;
+
+            if (current_value > ticket_avalable){
+                current_value = ticket_avalable;
+            }
             input_field.value = current_value.toString();
         });
 
         sub_btn.addEventListener("click", function(){
-            input_field = container.querySelector("input[type=number]");
+            input_field = input_container.querySelector("input[type=number]");
             current_value = parseInt(input_field.value);
             current_value--;
 

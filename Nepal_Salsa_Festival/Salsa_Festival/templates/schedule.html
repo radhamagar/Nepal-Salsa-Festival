@@ -7,10 +7,15 @@ Nepal Salsa Festival | Schedule
 {% block content %}
 <section class="section-schedule">
     <div class="column">
-        <h1>Salsa Festival 2023 Schedule</h1>
+        <h1>{{festival.name}}</h1>
     </div>
     <div class="column">
         <div class="event-timing">
+            {% for s in schedule %}
+            <p>{{s.time}}<span class="line"></span> {{s.act}}</p>
+            {% endfor %}
+
+            {% comment %}
             <p>2:00 PM <span class="line"></span> Bachata Dance</p>
             <p>3:00 PM <span class="line"></span> The Punks</p>
             <p>4:00 PM <span class="line"></span> Alfred Times</p>
@@ -18,6 +23,7 @@ Nepal Salsa Festival | Schedule
             <p>7:00 PM <span class="line"></span> David Beckham</p>
             <p>8:00 PM <span class="line"></span> Hari Baral</p>
             <p>9:00 PM <span class="line"></span> Riya Shah</p>
+            {% endcomment %}
         </div>
     </div>
 </section>

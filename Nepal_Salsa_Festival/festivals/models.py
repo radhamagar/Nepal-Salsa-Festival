@@ -21,6 +21,14 @@ class Festival(models.Model):
     def __str__(self):
         return self.name
 
+class Schedule(models.Model):
+    festival = models.ForeignKey(Festival, on_delete=models.CASCADE)
+    time = models.TimeField()
+    act = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.act
+
 class FestivalImages(models.Model):
     festival = models.ForeignKey(Festival, default=None, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=get_image_file, verbose_name="Image")
@@ -67,7 +75,8 @@ class Ticket(models.Model):
     festival = models.ForeignKey(to=Festival, on_delete=models.CASCADE)
     ticket_type = models.CharField(max_length=255, default="Regular")
     price = models.PositiveIntegerField(default=0)
-    max_amount = models.PositiveIntegerField(default=0)
+    max_no_tickets = models.PositiveIntegerField(default=0)
+    sold_tickets = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.festival.user.first_name

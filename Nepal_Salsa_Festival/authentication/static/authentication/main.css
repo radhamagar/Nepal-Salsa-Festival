@@ -6,7 +6,6 @@
     align-items: center;
     justify-content: center;
     padding: 2rem 5rem;
-    height: 80vh;
 }
 
 .row {
@@ -72,3 +71,4 @@
     padding: 15px;
     font-size: 1.375rem
 }
+
