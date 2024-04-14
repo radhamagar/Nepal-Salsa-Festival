@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Nepal Salsa Profile | Profile {% endblock title %}
+
+{% block style %}
+<style>
+    button.btn {
+        color: #fff;
+        background: var(--primary-color);
+        border-radius: 25px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 1.43rem;
+        margin-top: 5%;
+        width: fit-content;
+        display: unset;
+        text-transform: unset;
+        padding: 2% 3%;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #BA68C8
+    }
+
+    .profile-button {
+        background: rgb(99, 39, 120);
+        box-shadow: none;
+        border: none
+    }
+
+    .profile-button:hover {
+        background: #682773
+    }
+
+    .profile-button:focus {
+        background: #682773;
+        box-shadow: none
+    }
+
+    .profile-button:active {
+        background: #682773;
+        box-shadow: none
+    }
+
+    .back:hover {
+        color: #682773;
+        cursor: pointer
+    }
+
+    .labels {
+        font-size: 1.25rem;
+    }
+
+    .add-experience:hover {
+        background: #BA68C8;
+        color: #fff;
+        cursor: pointer;
+        border: solid 1px #BA68C8
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="container">
+    <form method="POST" action="">
+        <div class="row">
+            {% csrf_token %}
+            <div class="col-md-6 border-end">
+                <div class="p-3 py-6">
+                    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom">
+                        <h4 class="fw-bolder fs-3">Profile Settings</h4>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label class="labels">First Name</label>
+                            <input type="text" class="form-control" placeholder="first name" value="{{user.first_name}}" name="first_name">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">Last Name</label>
+                            <input type="text" class="form-control" value="{{user.last_name}}" placeholder="Last Name" name="last_name">
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels">Mobile Number</label>
+                            <input type="text" class="form-control" placeholder="enter phone number" value="{{user.ph_number}}" name="ph_number">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Email</label>
+                            <input type="text" class="form-control" placeholder="enter email" value="{{user.email}}" name="email">
+                        </div>
+                    </div>
+                    <div class="mt-2 text-center">
+                        <button class="btn btn-primary profile-button" type="submit">Update Profile</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3 py-6">
+                <div class="d-flex justify-content-between align-items-center mb-3 border-bottom">
+                    <h4 class="fw-bolder fs-3">Orders</h4>
+                </div>
+                </div>
+                <ul class="list-group">
+                    {% for order in orders %}
+                    <li class="list-group-item">
+                        <div class="fw-semi-bold fs-5 my-3">{{order.order_name}}</div>
+                        <p style="font-size: 1rem;"><span style="opacity:0.5">on</span> {{order.order_date}}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+    </form>
+</div>
+{% endblock %}

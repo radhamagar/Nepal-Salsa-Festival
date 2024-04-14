@@ -1,0 +1,33 @@
+body {
+    background-color: #d3dcdc !important;
+}
+
+.center {
+    width: 900px;
+    margin: auto;
+}
+
+.button-a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.fff {
+    font-family: cursive;
+    font-size: 3em !important;
+}
+
+input {
+    border: 1px solid #000 !important;
+}
+
+select {
+    border: 1px solid #000 !important;
+}
+textarea {
+    border: 1px solid #000 !important;
+}
+
+label {
+    font-size: 1.3em;
+}

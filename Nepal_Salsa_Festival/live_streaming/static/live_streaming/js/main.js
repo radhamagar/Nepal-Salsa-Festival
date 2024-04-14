@@ -13,9 +13,10 @@ let uid = String(Math.floor(Math.random()*100000));
 let queryStrings = window.location.search;
 let urlParams = new URLSearchParams(queryStrings);
 let roomId = urlParams.get("room");
+let broadcaster = urlParams.get("broadcaster");
 
 if(!roomId){
-  window.location = "/lobby";
+    window.location = "/lobby";
 }
 
 const headers = new Headers();
@@ -51,7 +52,6 @@ async function init(){
 
   localStream = await navigator.mediaDevices.getUserMedia(constraints);
   document.getElementById("user-1").srcObject = localStream;
-
 }
 
 async function handleUserJoined(MemberId){
@@ -84,8 +84,6 @@ async function handleMessageFromPeer(message, MemberId){
 
 async function createPeerConnection(MemberId){
   peerConnection = new RTCPeerConnection(servers);
-
-
 
   remoteStream = new MediaStream();
   document.getElementById("user-2").srcObject = remoteStream;
@@ -177,3 +175,63 @@ document.getElementById("mic-btn").addEventListener("click", toggleMic);
 
 window.addEventListener("beforeunload", leaveChannel);
 init();
+
+/*
+let localStream;
+let client;
+let channel;
+let uid = String(Math.floor(Math.random() * 100000));
+
+const APP_ID = "fa2e87a7a9a14a11b4e663281277a409";
+
+async function init() {
+    try {
+        let queryStrings = window.location.search;
+        let urlParams = new URLSearchParams(queryStrings);
+        let roomId = urlParams.get("room");
+        let broadcaster = urlParams.get("broadcaster");
+
+        if (!roomId && !broadcaster) {
+            window.location = "/lobby";
+            return;
+        }
+
+        client = await AgoraRTM.createInstance(APP_ID);
+        await client.login({ uid });
+
+        channel = client.createChannel(roomId);
+        await channel.join();
+
+        localStream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true// Only need video feed from the broadcaster
+        });
+        document.getElementById("user-1").srcObject = localStream;
+    } catch (error) {
+        console.error("Initialization failed:", error);
+    }
+}
+
+async function leaveChannel() {
+    try {
+        if (channel) await channel.leave();
+        if (client) await client.logout();
+        if (localStream) {
+            let tracks = localStream.getTracks();
+            tracks.forEach(track => track.stop());
+        }
+    } catch (error) {
+        console.error("Cleanup failed:", error);
+    }
+}
+
+document.getElementById("leave-btn").addEventListener("click", function() {
+    leaveChannel().then(() => {
+        window.location = "/";
+    });
+});
+
+window.addEventListener("beforeunload", leaveChannel);
+init();
+*/
+

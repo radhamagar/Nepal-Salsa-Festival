@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+Nepal Salsa Festival | Lobby
+{% endblock %}
+
+{% block content %}
+{% comment %}
+<link href="{% static 'live_streaming/css/lobby.css' %}" rel="stylesheet">
+<div id="form-container">
+    <div id="form__container__header">
+        <p>Enter Your Room ID</p>
+    </div>
+
+    <div id="form__content__wrapper">
+        <form id="join-form">
+            <input type="text" name="join_link" required />
+            <input type="submit" value="Join Room" />
+        </form>
+    </div>
+</div>
+<script>
+    const join_form = document.forms[0];
+    join_form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const roomId = event.target.join_link.value;
+        window.location.href = `/live?room=${roomId}`;
+    })
+</script>
+{% endcomment %}
+<h1>Viewer</h1>
+<video autoplay id='remoteVideo'></video>
+
+<script>
+const peer = new RTCPeerConnection({
+    iceServers: [
+        { urls: "stun:stun.stunprotocol.org" }
+    ]
+});
+
+peer.ontrack = event => {
+    const remoteVideo = document.getElementById("remoteVideo");
+    remoteVideo.srcObject = event.streams[0];
+};
+
+async function createOffer() {
+    try {
+        const offer = await peer.createOffer();
+        await peer.setLocalDescription(offer);
+
+        const payload = {
+            sdp: peer.localDescription
+        };
+
+        const response = await axios.post('/consumer/', payload);
+        const desc = new RTCSessionDescription(response.data.sdp);
+        await peer.setRemoteDescription(desc);
+    } catch (error) {
+        console.error("Error creating offer:", error);
+    }
+}
+createOffer();
+
+</script>
+{% endblock %}

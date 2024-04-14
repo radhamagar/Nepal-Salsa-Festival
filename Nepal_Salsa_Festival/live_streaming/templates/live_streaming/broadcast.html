@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Nepal Salsa Festval | Live Streaming
+{% endblock title %}
+
+{% block content %}
+{% comment %}
+
+<link href="{% static 'live_streaming/css/main.css' %}" rel="stylesheet" type="text/css">
+<section id="live_streaming">
+    <div id="videos">
+        <video class="video-player" id="user-1" autoplay playsinline></video>
+        <video class="video-player" id="user-2" autoplay playsinline></video>
+    </div>
+
+    <div id="controls">
+        <div class="icon-container" id="camera-btn">
+            <img src={% static "live_streaming/icons/camera.png" %} alt="">
+        </div>
+
+        <div class="icon-container" id="mic-btn">
+            <img src={% static "live_streaming/icons/mic.png" %} alt="">
+        </div>
+
+        <div class="icon-container" id="leave-btn">
+            <img src={% static "live_streaming/icons/phone.png" %} alt="">
+        </div>
+    </div>
+</section>
+<script src={% static "live_streaming/js/agora-rtm-sdk-1.5.1.js" %}></script>
+<script src={% static "live_streaming/js/main.js" %}></script>
+{% endcomment %}
+<h2>Available Cameras</h2>
+<select id="availableCameras">
+</select>
+<button type="button">Open Camera</button>
+
+<video id="localVideo" autoplay></video>
+
+<script>
+ class SignalingChannel {
+            constructor(remoteClientId) {
+                this.remoteClientId = remoteClientId;
+                this.websocket = new WebSocket("ws://localhost:8000/");
+
+                this.websocket.addEventListener('message', event => {
+                    const message = JSON.parse(event.data);
+                    if (message.type === 'offer' || message.type === 'answer' || message.type === 'ice') {
+                        // Handle incoming signaling messages
+                    }
+                });
+            }
+
+            send(message) {
+                this.websocket.send(JSON.stringify(message));
+            }
+        }
+
+        window.addEventListener("load", async function(){
+            const videoCameras = await getConnectedDevices('videoinput');
+            updateCameraList(videoCameras);
+        });
+
+        async function updateCameraList(cameras) {
+            const listElement = document.querySelector('select#availableCameras');
+            listElement.innerHTML = '';
+            cameras.map(camera => {
+                const cameraOption = document.createElement("option");
+                cameraOption.label = camera.label;
+                cameraOption.value = camera.deviceId;
+                listElement.add(cameraOption);
+            });
+        }
+
+        async function getConnectedDevices(type) {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            return devices.filter(device => device.kind === type);
+        }
+
+        navigator.mediaDevices.addEventListener('devicechange', async event => {
+            const newCameraList = await getConnectedDevices('videoinput');
+            updateCameraList(newCameraList);
+        });
+
+        async function openCamera(cameraId){
+            const constraints = {
+                "deviceId" : cameraId,
+                "audio" : true,
+                "video" : true
+            }
+
+            return await navigator.mediaDevices.getUserMedia(constraints);
+        }
+
+        const cameraOpenBtn = document.querySelector("button");
+
+        cameraOpenBtn.addEventListener("click", async function(e){
+            const availableCameras = document.getElementById("availableCameras");
+            const selectedOption = availableCameras.options[availableCameras.selectedIndex];
+            const stream = await openCamera(selectedOption.value);
+
+            const videoElement = document.querySelector('video#localVideo');
+            videoElement.srcObject = stream;
+            makeCall();
+        });
+
+        signalingChannel = new SignalingChannel("101");
+
+        async function makeCall() {
+            const configuration = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
+            const peerConnection = new RTCPeerConnection(configuration);
+
+            signalingChannel.addEventListener('message', async message => {
+                if (message.answer) {
+                    const remoteDesc = new RTCSessionDescription(message.answer);
+                    await peerConnection.setRemoteDescription(remoteDesc);
+                }
+            });
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            signalingChannel.send({'offer': offer});
+        }
+</script>
+{% endblock content %}

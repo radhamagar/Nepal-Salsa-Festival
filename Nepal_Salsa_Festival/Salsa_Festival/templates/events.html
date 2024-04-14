@@ -1,22 +1,23 @@
 {% extends "base.html" %}
 
-{% block title%}Nepal Salsa Festival | Upcoming Events{% endblock %}
+{% block title %}Nepal Salsa Festival | Upcoming Events{% endblock %}
 
 {% block content %}
-<section id="events">
-    <h1>Upcoming Events</h1>
+<section id="events" class="container">
+    <h1 class="text-center">Upcoming Events</h1>
 
-    <div class="grid-container">
+    <div class="row">
         {% for event in upcoming_events %}
-        <div class="card">
-            <figure>
-                <img src="{{event.feature_image.url}}" alt="{{event.title}}" />
-                <figcaption>
-                    {{event.name}}
-                </figcaption>
-            </figure>
+        <div class="col-lg-6 col-md-4 col-sm-12 mb-4">
+            <div class="card">
+                <img src="{{event.feature_image.url}}" alt="{{event.title}}" class="card-img-top" />
+                <div class="card-body">
+                    <h5 class="card-title">{{event.name}}</h5>
+                </div>
+            </div>
         </div>
         {% endfor %}
     </div>
 </section>
 {% endblock %}
+

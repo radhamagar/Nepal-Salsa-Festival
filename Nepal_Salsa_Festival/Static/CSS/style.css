@@ -32,10 +32,10 @@ html {
 }
 
 main {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .separator {
@@ -166,11 +166,6 @@ nav {
     justify-content: center;
 }
 
-.content-img img {
-    height: auto;
-    width: 42rem;
-}
-
 .content-text {
     display: flex;
     flex-direction: column;
@@ -213,6 +208,7 @@ nav {
     background-color: #c70039;
     color: white;
     border-color: white;
+    border-width: 2px;
     text-align: center;
     font-family: var(--secondary-font);
     background-image: unset;
@@ -230,6 +226,20 @@ nav {
     text-transform: uppercase;
     margin-top: 5%;
     width: 100%;
+    background-image: unset;
+    border-color: var(--primary-color);
+}
+
+
+.btn:focus {
+    background-color: var(--primary-color);
+    outline: var(--primary-color);
+}
+
+.btn:hover {
+    color: var(--primary-color);
+    background-color: white;
+    border-color: var(--primary-color);
 }
 
 .btn-primary {
@@ -248,18 +258,21 @@ nav {
     font-weight: 300;
 }
 
+.feedbacks h2,
 .sponsors-section h2 {
     font-size: 6rem;
     text-align: center;
     font-family: 'Galada', cursive;
     color: #c70039;
     font-weight: 500;
+    padding: 5%;
 }
 
 .sponsor-imgs {
     display: flex;
     justify-content: space-between;
     padding: 2% 10%;
+    text-align: center;
 }
 
 .sponsor-imgs img {
@@ -303,10 +316,6 @@ nav {
     column-gap: 15px;
 }
 
-.contact-body .row:nth-child(1) img {
-    max-width: 840px;
-}
-
 .contact-body h2 {
     font-family: var(--primary-font);
     font-size: 6rem;
@@ -318,7 +327,6 @@ nav {
 
 .contact-body .row {
     align-items: center;
-    column-gap: 24px;
     padding: 1% 4%;
 }
 
@@ -609,8 +617,8 @@ nav {
 }
 
 .festival-images img {
-    height: 526px;
-    width: 526px;
+    height: 500px;
+    width: 500px;
     object-fit: cover;
 }
 
@@ -740,6 +748,7 @@ nav {
     list-style: none;
     margin: 2% 0;
     font-size: 1rem;
+    text-wrap: balance;
 }
 
 #participate {
@@ -776,8 +785,6 @@ nav {
 
 #events {
     text-align: center;
-    padding: 3% 7%;
-    margin: 2% 0;
 }
 
 #events>* {
@@ -792,11 +799,6 @@ nav {
 
 #events .card {
     overflow: hidden;
-}
-
-#events .card img {
-    height: 500px;
-    width: 500px;
 }
 
 #events .card figcaption {

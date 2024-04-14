@@ -74,6 +74,7 @@
 </section>
 
 <script>
+    const form = document.querySelector("form");
     const ticket_rows = document.querySelectorAll("tbody tr");
 
     ticket_rows.forEach(ticket_row => {
@@ -105,6 +106,21 @@
 
             input_field.value = current_value.toString();
         });
+    });
+
+    form.addEventListener("submit", function(e){
+        const ticket_inputs = document.querySelectorAll(["input[type=number]"]);
+        let zero_value = 0;
+
+        ticket_inputs.forEach(input => {
+            if (input.value  == 0){
+                zero_value++;
+            }
+        });
+
+        if (zero_value === ticket_inputs.length){
+            e.preventDefault();
+        }
     });
 </script>
 {% endblock %}

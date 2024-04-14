@@ -1,5 +1,6 @@
 from django.contrib import admin
 from festivals.models import *
+from .models import *
 
 # Register your models here.
 class SiteAdmin(admin.AdminSite):
@@ -27,3 +28,8 @@ admin.site.register(DancePerformers)
 admin.site.register(Musicians)
 admin.site.register(Ticket)
 admin.site.register(Order)
+admin.site.register(Volunteer)
+admin.site.register(Sponsor)
+admin.site.register(Feedback)
+
+

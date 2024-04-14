@@ -3,33 +3,47 @@
 
 {% block title %}Nepal Salsa Festival | Signin{% endblock title %}
 
+{% block style %}
+<style>
+    .form_container{
+        display: block !important;
+    }
+</style>
+{% endblock style %}
+
 {% block content %}
-
-
 <link href="{% static "/authentication/main.css" %}" rel="stylesheet" />
 <div class="form_container">
     <div class="row">
-        <div class="column flex-column">
+        <div class="col flex-column col-md-6 welcome">
             <h1>Welcome!</h1>
             <div class="separator"></div>
             <p>Create an account</p>
             <a class="btn" href="{% url 'signup' %}" class="btn">Sign Up</a>
         </div>
-        <div class="column">
+        <div class="col col-md-6">
             <form method="post" action="">
                 {% csrf_token %}
-                {% for field in form%}
+                {% for field in form %}
                     <div class="form-field">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
                         {{ field }}
                     </div>
 
                     {{ field.errors }}
                 {% endfor %}
-                <a href="{% url 'lost_password' %}">Forget Password? Click Here To Change</a>
+                <div class="my-2">
+                <a href="{% url 'lost_password' %}" class="my-3">Forget Password? Click Here To Change</a>
+                </div>
                 <button class="btn no-border"  type="submit" name="signin">Sign In</button>
             </form>
         </div>
     </div>
 </div>
+<script>
+    const inputs = document.querySelectorAll("input");
+    inputs.forEach(input => {
+        input.classList.add("form-control");
+    });
+</script>
 {% endblock content %}

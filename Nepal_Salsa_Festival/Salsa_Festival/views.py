@@ -1,13 +1,16 @@
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render
-from django.shortcuts import redirect
-from festivals.models import Festival, Ticket, TicketAmount, Schedule
+from django.shortcuts import render, redirect, reverse
+from festivals.models import Festival, Ticket, TicketAmount, Schedule, Order
+from .forms import SponsorForm, VolunteerForm, FeedbackForm
+from .models import Sponsor, Volunteer, Feedback
 from django.utils.text import slugify
 from authentication.models import SiteUser
 import json
 import requests
 from django.forms.models import model_to_dict
 from django.utils import timezone
+from django.db.models import Max
+from django.contrib import messages
 
 # Create your views here.
 def home(request):
@@ -16,9 +19,15 @@ def home(request):
     if(request.user.is_authenticated and not request.user.is_superuser):
         is_authenticated = request.user.is_authenticated
 
+    feedbacks = Feedback.objects.all()
+    sponsors = Sponsor.objects.filter(festival=next_festival)
+    print(sponsors)
+
     context = {
         "next_festival" : next_festival,
         "is_authenticated" : is_authenticated,
+        "feedbacks" : feedbacks,
+        "sponsors" : sponsors,
     }
 
     return render(request, 'home.html', context)
@@ -53,12 +62,40 @@ def participate(request):
     if(request.user.is_authenticated and not request.user.is_superuser):
         is_authenticated = request.user.is_authenticated
 
-    context = {
-        "is_authenticated" : is_authenticated
-    }
+    next_festival = Festival.objects.get(is_next=True)
+    sponsor_form = SponsorForm()
+    volunteer_form = VolunteerForm()
 
     if (request.POST):
-        print(request.POST)
+        request_dict = request.POST.dict()
+
+        if (request_dict["which_form"] == "sponsor_form"):
+            sponsor_form = SponsorForm(request.POST, request.FILES)
+
+            if (sponsor_form.is_valid()):
+                sponsor_form.save()
+                messages.success(request, "Your Approach Has Sucessfully Been Registered..")
+                return redirect(reverse("participate"))
+            else:
+                messages.error(request, "Invalid Data, Check Your Email")
+                return redirect(reverse("participate"))
+        else:
+            volunteer_form = VolunteerForm(request.POST)
+
+            if (volunteer_form.is_valid()):
+                volunteer_form.save()
+                messages.success(request, "Thank You For Showing Enthusiasm on Volunteering...")
+                return redirect(reverse("participate"))
+            else:
+                messages.error(request, "Invalid Data, Check Your Email")
+                return redirect(reverse("participate"))
+
+    context = {
+        "is_authenticated" : is_authenticated,
+        "sponsor_form" : sponsor_form,
+        "volunteer_form" : volunteer_form
+    }
+
     return render(request, "participate.html", context)
 
 def events(request):
@@ -133,7 +170,17 @@ def payment(request, id):
     return render(request, "payment.html", context)
 
 def khalti_gateway(request, id):
-    user = request.user
+    user = request.user;
+    total = 0
+
+    tickets_session = request.session.get("tickets")
+    for key,value in tickets_session.items():
+        total += value["amount"] * value["price"]
+
+    orders= Order.objects.all()
+    max_order = orders.aggregate(Max('id'))
+    max_id = max_order["id__max"]
+
     try:
         if not user.is_superuser:
             full_name = f"{user.first_name} {user.last_name}"
@@ -144,10 +191,11 @@ def khalti_gateway(request, id):
                 payload = json.dumps({
                     "return_url": f"http://localhost:8000/success?festival={id}&",
                     "website_url": "http://localhost:8000/",
-                    "amount": f"{1000*100}",
+                    #"amount": f"{total*100}",
+                    "amount": f"{10*100}",
 
-                    "purchase_order_id": "Order01",
-                    "purchase_order_name": "test",
+                    "purchase_order_id": f"{max_id}",
+                    "purchase_order_name": f"{slugify(full_name)}-tickets-{max_id}",
 
                     "customer_info": {
                     "name": full_name,
@@ -162,8 +210,8 @@ def khalti_gateway(request, id):
                 }
 
                 response = requests.request("POST", url, headers=headers, data=payload)
+                print(response)
                 payment_url = json.loads(response.text)["payment_url"]
-
                 if(response.status_code == 200):
                     return redirect(payment_url)
                 else:
@@ -173,6 +221,22 @@ def khalti_gateway(request, id):
         else:
             return redirect("signin")
 
-    except:
-        return redirect("signin");
+    except Exception as e:
+        print(f"Errror :  {response.text}")
+        return redirect("signin")
 
+def feedback(request):
+    form = FeedbackForm()
+
+    if (request.POST):
+        form = FeedbackForm(request.POST)
+
+        if (form.is_valid()):
+            form.save()
+            messages.success(request, "Thnank You For Your Feedback!!")
+            return redirect(reverse("feedback"))
+    context = {
+        "form" : form
+    }
+
+    return render(request, "feedback.html", context)

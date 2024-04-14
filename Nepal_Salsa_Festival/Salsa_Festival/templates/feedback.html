@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Nepal Salsa Festival | User Feedback
+{% endblock title %}
+
+{% block style %}
+<style>
+    form{
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<h1 class="text-center">User Feedback</h1>
+<form class="was-validated" method="POST" action="">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="mb-3">
+            <label class="form-label" for="{{field.id_for_label}}">{{field.label}}</label>
+            {{field}}
+            <div class="invalid-feedback">Example invalid select feedback</div>
+        </div>
+    {% endfor %}
+    <div class="mb-3">
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
+</form>
+<script>
+    const select_fields = document.querySelectorAll("form select");
+    const input_fields = document.querySelectorAll("form input");
+    const labels = document.querySelectorAll("form label");
+    const text_areas = document.querySelectorAll("form textarea");
+
+    labels.forEach(label => {
+        label.classList.add("form-label");
+    });
+
+    select_fields.forEach(select => {
+        select.classList.add("form-select");
+    });
+
+    input_fields.forEach(input => {
+        input.classList.add("form-control");
+    });
+
+    text_areas.forEach(text_area => {
+        text_area.classList.add("form-control");
+    });
+</script>
+{% endblock content %}
+

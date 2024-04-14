@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.forms import models
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
+import re
 
 class LoginForm(forms.Form):
     email = forms.CharField(widget=forms.EmailInput)
@@ -64,10 +65,11 @@ class RegisterForm(models.ModelForm):
 
 
     def clean_confirm_password(self):
-        confirm_password  = self.cleaned_data["confirm_password"]
+        print(self)
         password = self.cleaned_data["password"]
+        confirm_password = self.cleaned_data["confirm_password"]
 
         if password != confirm_password:
-            raise forms.ValidationError("Password and Confirm Password must be same")
-        return confirm_password
+            raise forms.ValidationError("Password and Confirm Password must be the same")
+
 

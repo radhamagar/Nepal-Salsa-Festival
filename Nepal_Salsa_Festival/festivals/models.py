@@ -1,6 +1,8 @@
 from django.db import models
 from authentication.models import SiteUser
 from django.utils.text import slugify
+from datetime import datetime
+from django.utils import timezone
 
 # Create your models here.
 def get_image_file(instance, filename):
@@ -73,7 +75,7 @@ class FoodVendors(models.Model):
 
 class Ticket(models.Model):
     festival = models.ForeignKey(to=Festival, on_delete=models.CASCADE)
-    ticket_type = models.CharField(max_length=255, default="Regular")
+    ticket_type = models.CharField(max_length=255, default=None)
     price = models.PositiveIntegerField(default=0)
     max_no_tickets = models.PositiveIntegerField(default=0)
     sold_tickets = models.PositiveIntegerField(default=0)
@@ -89,8 +91,11 @@ class TicketAmount(models.Model):
         return self.ticket.ticket_type
 
 class Order(models.Model):
+    id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(SiteUser, on_delete=models.CASCADE)
     ticket_amounts = models.ManyToManyField(to=TicketAmount, related_name="orders")
+    order_date = models.DateTimeField(default=timezone.now)
+    order_name = models.SlugField(default="")
 
     def __str__(self):
         return self.user.email;

@@ -2,27 +2,31 @@
 {% load static %}
 {% block title %}Nepal Salsa Festival | Sign Up{% endblock title %}
 
+{% block style %}
+<style>
+</style>
+{% endblock style %}
+
 {% block content %}
 <link href="{% static "authentication/main.css" %}" rel="stylesheet" />
 <div class="form_container">
     <div class="row">
-        <div class="column flex-column">
+        <div class="col col-md-6 welcome">
             <h1>Welcome!</h1>
             <div class="separator"></div>
             <p>Already Have and Account?</p>
             <a href="signin" class="btn">Sign In</a>
         </div>
-        <div class="column">
+        <div class="col col-md-6">
             <form method="post" action="">
                 {% csrf_token %}
-
-                <div class="form-group">
-                    <div class="form-field">
-                        <label for="{{ form.first_name.id_for_label  }}">{{ form.first_name.label }}</label>
+                <div class="row">
+                    <div class="col col-md-6 form-field">
+                        <label for="{{ form.first_name.id_for_label  }}" class="form-label">{{ form.first_name.label }}</label>
                         {{form.first_name}}
                         {{form.errors.first_name}}
                     </div>
-                    <div class="form-field">
+                    <div class="col col-md-6 form-field">
                         <label for="{{ form.last_name.id_for_label  }}">{{ form.last_name.label }}</label>
                         {{form.last_name}}
                         {{form.errors.last_name}}
@@ -57,6 +61,13 @@
         </div>
     </div>
 </div>
+<script>
+    const inputs = document.querySelectorAll(".form-field input");
+
+    inputs.forEach(input => {
+        input.classList.add("form-control");
+    });
+</script>
 {% endblock content %}
 
 

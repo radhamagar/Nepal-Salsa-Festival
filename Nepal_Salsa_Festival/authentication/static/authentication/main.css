@@ -5,7 +5,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem 5rem;
+    padding: 2rem 20%;
 }
 
 .row {
@@ -15,35 +15,38 @@
     align-items: center;
 }
 
-.column {
-    padding: 13rem;
-}
-
-.column:nth-child(1) {
-    background-color: black;
-}
-
-.column:nth-child(2) {
-    padding: 8.3rem 4.5rem;
-}
-
-.column h1 {
+.welcome h1 {
     font-family: var(--primary-font);
     color: var(--primary-color);
     font-size: 6rem;
 }
 
-.column p {
+.welcome p {
     color: white;
     font-size: 1.75rem;
     text-align: center;
     line-height: 2;
 }
 
+.welcome{
+    background-color: black;
+    color: white;
+    padding: 20% 5%;
+}
+
 .form_container .separator {
     width: 100%;
     border: 3px solid white;
     border-radius: 5px;
+}
+
+.form-container {
+    max-width: 1200px;
+}
+
+
+ul {
+    padding-left: 0;
 }
 
 .form-group {
@@ -63,8 +66,6 @@
 }
 
 .form-field input {
-    height: 5rem;
-    width: 43rem;
     border-radius: 18px;
     border: none;
     background-color: #D6D6D6;

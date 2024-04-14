@@ -7,6 +7,7 @@ import json
 import requests
 from django.http import HttpResponse
 from django.core.mail import send_mail
+from django.contrib import messages
 
 # Create your views here.
 def festivals(request):
@@ -75,6 +76,9 @@ def success(request):
         order.shipping_address = "Gaushala, Kathmandu"
         tickets = Ticket.objects.filter(festival_id=festival_id)
 
+        order_name = request.GET["purchase_order_name"]
+        order.order_name= order_name
+
         for ticket in tickets:
             if ticket.ticket_type in ticket_keys:
                 instance = TicketAmount()
@@ -95,15 +99,18 @@ def success(request):
         subject = 'Thank You For Purchasing The Tickets'
         message = f'''
             We will be happy to meet you at the venue!
+            We sucessfully recieved the order {order.order_name} on {order.order_date}.
         '''
         sender_email = 'radhabudhamagar8@gmail.com'
-        print(user.email)
 
-        send_mail(subject, message, sender_email, ["radhabudhamagar8@gmail.com",])
+        send_list = [user.email,]
+
+        send_mail(subject, message, sender_email, send_list)
 
         if "tickets" in request.session:
             del request.session["tickets"]
 
+        messages.success(request,f"Thank You For Purchasing The Tickets!!!!!")
         return render(request, "success.html", context)
     else:
         return  HttpResponse("You are not authenticated.")

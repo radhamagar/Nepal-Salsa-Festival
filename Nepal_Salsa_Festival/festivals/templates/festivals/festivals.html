@@ -4,77 +4,107 @@
 
 {% block content %}
 <section class="festival-section">
-    <div class="images-div">
-        <div class="festival-images">
-            <h1 class="text-center">Previous Festivals</h1>
-            <div class="flex-container">
-                {% for festival, dict in festival_images.items%}
-                <figure>
-                    <a href="{% url 'festival_description' dict.id %}" >
-                        <img src='{{dict.image.url}}' alt={{festival}} />
-                    </a>
-                    <figcaption class="text-center">{{festival}}</figcaption>
-                </figure>
-                {% endfor %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="festival-images">
+                    <h1 class="text-center">Previous Festivals</h1>
+                    <div class="flex-container">
+                        {% for festival, dict in festival_images.items %}
+                        <div class="card">
+                            <a href="{% url 'festival_description' dict.id %}">
+                                <img src='{{dict.image.url}}' alt="{{festival}}" class="card-img-top" />
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title text-center">{{festival}}</h5>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="festival-images">
-            <h1 class="text-center">Previous Emcees</h1>
-            <div class="flex-container">
-                {% for emcee in emcees %}
-                <figure>
-                    <a href="" >
-                        <img src='{{emcee.image.url}}' alt={{emcee.name}}/>
-                    </a>
-                    <figcaption class="text-center">{{emcee.name}}</figcaption>
-                </figure>
-                {% endfor %}
+        <div class="row">
+            <div class="col">
+                <div class="festival-images">
+                    <h1 class="text-center">Previous Emcees</h1>
+                    <div class="flex-container">
+                        {% for emcee in emcees %}
+                        <div class="card">
+                            <a href="">
+                                <img src='{{emcee.image.url}}' alt="{{emcee.name}}" class="card-img-top" />
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title text-center">{{emcee.name}}</h5>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="festival-images">
-            <h1 class="text-center">Previous Emcees</h1>
-            <div class="flex-container">
-                {% for musician in musicians %}
-                <figure>
-                    <a href="" >
-                        <img src='{{musician.image.url}}' alt={{musician.name}}/>
-                    </a>
-                    <figcaption class="text-center">{{musician.name}}</figcaption>
-                </figure>
-                {% endfor %}
+        <div class="row">
+            <div class="col">
+                <div class="festival-images">
+                    <h1 class="text-center">Previous Musicians</h1>
+                    <div class="flex-container">
+                        {% for musician in musicians %}
+                        <div class="card">
+                            <a href="">
+                                <img src='{{musician.image.url}}' alt="{{musician.name}}" class="card-img-top" />
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title text-center">{{musician.name}}</h5>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="festival-images">
-            <h1 class="text-center">Previous Dancers</h1>
-            <div class="flex-container">
-                {% for dancer in dance_performances%}
-                <figure>
-                    <a href="" >
-                        <img src='{{dancer.image.url}}' alt={{dancer.name}}/>
-                    </a>
-                    <figcaption class="text-center">{{dancer.name}}</figcaption>
-                </figure>
-                {% endfor %}
+        <div class="row">
+            <div class="col">
+                <div class="festival-images">
+                    <h1 class="text-center">Previous Dancers</h1>
+                    <div class="flex-container">
+                        {% for dancer in dance_performances %}
+                        <div class="card">
+                            <a href="">
+                                <img src='{{dancer.image.url}}' alt="{{dancer.name}}" class="card-img-top" />
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title text-center">{{dancer.name}}</h5>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="festival-images">
-            <h1 class="text-center">Past Food Vendors</h1>
-            <div class="flex-container">
-                {% for vendor in food_vendors %}
-                <figure>
-                    <a href="" >
-                        <img src='{{vendor.image.url}}' alt={{vendor.name}}/>
-                    </a>
-                    <figcaption class="text-center">{{vendor.name}}</figcaption>
-                </figure>
-                {% endfor %}
+        <div class="row">
+            <div class="col">
+                <div class="festival-images">
+                    <h1 class="text-center">Past Food Vendors</h1>
+                    <div class="flex-container">
+                        {% for vendor in food_vendors %}
+                        <div class="card">
+                            <a href="">
+                                <img src='{{vendor.image.url}}' alt="{{vendor.name}}" class="card-img-top" />
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title text-center">{{vendor.name}}</h5>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
 </section>
 {% endblock %}
+
