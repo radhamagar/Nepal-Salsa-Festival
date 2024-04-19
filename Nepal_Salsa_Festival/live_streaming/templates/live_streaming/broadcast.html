@@ -6,6 +6,7 @@ Nepal Salsa Festval | Live Streaming
 {% endblock title %}
 
 {% block content %}
+
 {% comment %}
 
 <link href="{% static 'live_streaming/css/main.css' %}" rel="stylesheet" type="text/css">
@@ -32,95 +33,50 @@ Nepal Salsa Festval | Live Streaming
 <script src={% static "live_streaming/js/agora-rtm-sdk-1.5.1.js" %}></script>
 <script src={% static "live_streaming/js/main.js" %}></script>
 {% endcomment %}
-<h2>Available Cameras</h2>
-<select id="availableCameras">
-</select>
-<button type="button">Open Camera</button>
 
-<video id="localVideo" autoplay></video>
+<button id='my-button'>Start Stream</button>
+<video autoplay id="video"></video>
 
 <script>
- class SignalingChannel {
-            constructor(remoteClientId) {
-                this.remoteClientId = remoteClientId;
-                this.websocket = new WebSocket("ws://localhost:8000/");
+    document.getElementById('my-button').onclick = () => {
+        init();
+    }
 
-                this.websocket.addEventListener('message', event => {
-                    const message = JSON.parse(event.data);
-                    if (message.type === 'offer' || message.type === 'answer' || message.type === 'ice') {
-                        // Handle incoming signaling messages
-                    }
-                });
-            }
-
-            send(message) {
-                this.websocket.send(JSON.stringify(message));
-            }
+    async function init() {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        document.getElementById("video").srcObject = stream;
+        const peer = createPeer();
+        stream.getTracks().forEach(track => peer.addTrack(track, stream));
+        peer.onconnectionstatechange = function(event){
+            console.log(event);
         }
+    }
 
-        window.addEventListener("load", async function(){
-            const videoCameras = await getConnectedDevices('videoinput');
-            updateCameraList(videoCameras);
-        });
 
-        async function updateCameraList(cameras) {
-            const listElement = document.querySelector('select#availableCameras');
-            listElement.innerHTML = '';
-            cameras.map(camera => {
-                const cameraOption = document.createElement("option");
-                cameraOption.label = camera.label;
-                cameraOption.value = camera.deviceId;
-                listElement.add(cameraOption);
-            });
-        }
-
-        async function getConnectedDevices(type) {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            return devices.filter(device => device.kind === type);
-        }
-
-        navigator.mediaDevices.addEventListener('devicechange', async event => {
-            const newCameraList = await getConnectedDevices('videoinput');
-            updateCameraList(newCameraList);
-        });
-
-        async function openCamera(cameraId){
-            const constraints = {
-                "deviceId" : cameraId,
-                "audio" : true,
-                "video" : true
-            }
-
-            return await navigator.mediaDevices.getUserMedia(constraints);
-        }
-
-        const cameraOpenBtn = document.querySelector("button");
-
-        cameraOpenBtn.addEventListener("click", async function(e){
-            const availableCameras = document.getElementById("availableCameras");
-            const selectedOption = availableCameras.options[availableCameras.selectedIndex];
-            const stream = await openCamera(selectedOption.value);
-
-            const videoElement = document.querySelector('video#localVideo');
-            videoElement.srcObject = stream;
-            makeCall();
-        });
-
-        signalingChannel = new SignalingChannel("101");
-
-        async function makeCall() {
-            const configuration = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
-            const peerConnection = new RTCPeerConnection(configuration);
-
-            signalingChannel.addEventListener('message', async message => {
-                if (message.answer) {
-                    const remoteDesc = new RTCSessionDescription(message.answer);
-                    await peerConnection.setRemoteDescription(remoteDesc);
+    function createPeer() {
+        const peer = new RTCPeerConnection({
+            iceServers: [
+                {
+                    urls: "stun:stun.stunprotocol.org"
                 }
-            });
-            const offer = await peerConnection.createOffer();
-            await peerConnection.setLocalDescription(offer);
-            signalingChannel.send({'offer': offer});
-        }
+            ]
+        });
+        peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer);
+
+        return peer;
+    }
+
+    async function handleNegotiationNeededEvent(peer) {
+        const offer = await peer.createOffer();
+        await peer.setLocalDescription(offer);
+        const payload = {
+            sdp: peer.localDescription
+        };
+
+        const { data } = await axios.post('/broadcast/', payload);
+        const desc = new RTCSessionDescription(data);
+        peer.setRemoteDescription(desc).catch(e => console.log(e));
+    }
 </script>
+
 {% endblock content %}

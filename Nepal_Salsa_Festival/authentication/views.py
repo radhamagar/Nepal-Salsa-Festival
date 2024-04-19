@@ -20,13 +20,23 @@ def signin(request):
 
             if (user is not None):
                 if (user.is_superuser):
+                    login(request, user)
                     return redirect("admin/")
                 if (user.is_staff):
-                    return redirect(reverse("site_admin"))
+                    login(request, user)
+                    return redirect(reverse("dashboard"))
                 login(request, user)
                 messages.success(request, f"Hello {user.first_name} {user.last_name}, You're Sucessfully Logged In")
                 return redirect(reverse('home'))
-
+            
+    elif (not request.user.is_anonymous):
+        if (request.user.is_superuser):
+            return redirect("/admin")
+        elif (request.user.is_staff):
+            return redirect(reverse("dashboard"))
+        
+        return redirect(reverse('home'))
+        
     context = {'form' : form}
     return render(request, 'authentication/signin.html', context)
 
@@ -39,6 +49,14 @@ def signup(request):
             messages.success(request, f"Hello {form.cleaned_data['first_name']} {form.cleaned_data['last_name']}, Registratered Sucessfully, Please Log In")
             form.save()
             return redirect(reverse('signin'))
+    elif (not request.user.is_anonymous):
+        if (request.user.is_superuser):
+            return redirect("/admin")
+        elif (request.user.is_staff):
+            return redirect(reverse("dashboard"))
+        
+        return redirect(reverse('home'))
+    
     context = {'form' : form}
     return render(request, 'authentication/signup.html', context)
 

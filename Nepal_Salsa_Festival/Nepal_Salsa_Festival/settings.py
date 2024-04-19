@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
     'festivals.apps.FestivalsConfig',
     'mathfilters',
-    #'site_admin.apps.SiteAdminConfig',
+    'site_admin.apps.SiteAdminConfig',
     'live_streaming.apps.LiveStreamingConfig'
 ]
 

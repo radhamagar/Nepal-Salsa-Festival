@@ -26,7 +26,7 @@ class SponsorForm(forms.ModelForm):
 class FeedbackForm(forms.ModelForm):
     class Meta():
         model = Feedback
-        fields = "__all__"
+        fields = ('festival', 'message',)
         labels = {
             "festival" : "Feedback For Which Festival?",
             "first_name" : "Your First Name",

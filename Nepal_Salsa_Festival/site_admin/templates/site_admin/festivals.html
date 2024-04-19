@@ -1,0 +1,228 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+Nepal Salsa Festival | Festivals
+{% endblock title %}
+
+{% block style %}
+<style>
+    .limited-column {
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="mt-5 pt-5 mb-5">
+    <div class="m-auto" style="width: 90%;">
+        <div class="d-flex justify-content-between pt-4">
+            <div class="heading fs-3">All Festival</div>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                <i class="fa-solid fa-plus fa-lg"></i>
+            </button>
+        </div>
+        <hr />
+
+        <table class="table table-striped text-center table-responsive">
+            <thead>
+                <tr>
+                    <th scope="col">S.N.</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Past Description</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Is_Next</th>
+                    <th scope="col">Created By</th>
+                    <th scope="col" colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for festival in festivals %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{festival.name}}</td>
+                    <td>{{festival.date_time}}</td>
+                    <td class="limited-column">{{festival.description}}</td>
+                    <td class="limited-column">{{festival.past_description}}</td>
+                    <td>
+                        <img src="{{festival.feature_image.url}}" style="object-fit: cover; width: 50px; height: 50px;" />
+                    </td>
+                    <td>{{festival.location}}</td>
+                    <td>{{festival.is_next}}</td>
+                    <td>{{festival.user}}</td>
+                    <td>
+                        <button class="btn btn-primary edit" data-bs-toggle="modal" value="{{festival.id}}" data-bs-target="#festival-{{festival.id}}">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button class="btn btn-danger delete" value="{{festival.id}}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                <td>
+                <div class="modal fade" id="festival-{{festival.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Festival</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="" name="festival_create" id="festival_create_form" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    {% for field in form %}
+                                        <div class="mb-3">
+                                            <label for="{{field.id_for_label}}" class="form-label">{{field.label}}</label>
+                                            {{field}}
+                                        </div>
+                                    {% endfor %}
+
+                                    <button type="submit" class="btn btn-primary">Submit &rarr;</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Festival</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'create_festival' %}" name="festival_create" id="festival_create_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{field.id_for_label}}" class="form-label">{{field.label}}</label>
+                            {{field}}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-primary">Submit &rarr;</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const inputs = document.querySelectorAll("form input:not([type=checkbox])");
+    const selects = document.querySelectorAll("form select");
+    const text_areas = document.querySelectorAll("form textarea");
+    const festival_create_form = document.querySelector("#festival_create_form");
+
+    inputs.forEach(input => {
+        input.classList.add("form-control");
+    });
+
+    selects.forEach(select => {
+        select.classList.add("form-control");
+    });
+
+    text_areas.forEach(text_area => {
+        text_area.classList.add("form-control");
+        text_area.setAttribute("rows", "0")
+    });
+
+    const edit_btns = document.querySelectorAll(".edit");
+
+    edit_btns.forEach(edit => {
+        edit.addEventListener("click", async function(e){
+            const id = edit.value;
+            const modal = document.querySelector(edit.getAttribute("data-bs-target"));
+            const modal_form = modal.querySelector(".modal-body form");
+
+            const {data} = await axios.get(`/site_admin/edit_festival/${id}`);
+            const fields = Object.entries(data.festival.fields);
+
+            for ([key, value] of fields){
+                const field = modal_form[key];
+                if(!(key === "feature_image")){
+                    if (key === "is_next" && value === true){
+                        field.setAttribute("checked", "true");
+                        break;
+                    }
+
+                    if (key === "date_time"){
+                        let date  = new Date(value);
+                        date = date.toISOString().split('T')[0];
+                        field.value = date;
+                        continue;
+                    }
+                    field.value = value;
+                }else if (key == "feature_image"){
+                    if (!(field.parentElement.children.length >= 3)){
+                        const p = document.createElement("p");
+                        p.innerHTML = `Current Image : ${value}`;
+                        p.classList.add("limited-column");
+                        p.style = "max-width: 100%";
+                        field.parentElement.appendChild(p);
+
+                        if (p.innerHTML !== ""){
+                            field.required = false;
+                        }
+                    }
+                }
+            }
+
+            modal_form.addEventListener("submit", async function(e){
+                const formData = new FormData(modal_form);
+                const {data} = await axios.post(`/site_admin/edit_festival/${id}`,
+                    formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+
+                if (data.success){
+                    location.reload();
+                }
+            })
+        });
+    });
+
+    const delete_btns = document.querySelectorAll(".delete");
+
+    delete_btns.forEach(d => {
+        d.addEventListener("click", async function(e){
+            const id = d.value;
+            const response = window.confirm("Are you sure, you want to delete?");
+
+            if (response === true){
+                const {data} = await axios.delete(`/site_admin/delete_festival/${id}`);
+                console.log(data);
+
+                if (data.success){
+                    location.reload();
+                }
+            }
+        });
+    });
+
+    festival_create_form.addEventListener("submit", async function(e){
+        const formData = new FormData(festival_create_form);
+        const {data} = await axios.post("{% url 'create_festival' %}",
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+    });
+</script>
+
+{% endblock content %}

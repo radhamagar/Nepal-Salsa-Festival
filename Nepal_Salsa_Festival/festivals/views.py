@@ -105,7 +105,7 @@ def success(request):
 
         send_list = [user.email,]
 
-        send_mail(subject, message, sender_email, send_list)
+        send_mail(subject, message, sender_email, ["radhabudhamagar8@gmail.com",])
 
         if "tickets" in request.session:
             del request.session["tickets"]

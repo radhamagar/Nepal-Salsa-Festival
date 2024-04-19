@@ -1,5 +1,10 @@
-body {
-    background-color: #d3dcdc !important;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+:root {
+    --primary-font: 'Galada', cursive;
+    --secondary-font: 'Inter', sans-serif;
+    --primary-color: #CC1742;
+    --h1: 6rem;
 }
 
 .center {

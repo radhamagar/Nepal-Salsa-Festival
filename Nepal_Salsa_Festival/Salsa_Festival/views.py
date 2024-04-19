@@ -16,7 +16,7 @@ from django.contrib import messages
 def home(request):
     next_festival = Festival.objects.get(is_next=True)
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser):
+    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     feedbacks = Feedback.objects.all()
@@ -34,7 +34,7 @@ def home(request):
 
 def contact(request):
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser):
+    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     context = {
@@ -44,7 +44,7 @@ def contact(request):
 
 def schedule(request):
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser):
+    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     next_festival = Festival.objects.get(is_next=True)
@@ -59,7 +59,7 @@ def schedule(request):
 
 def participate(request):
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser):
+    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     next_festival = Festival.objects.get(is_next=True)
@@ -100,7 +100,7 @@ def participate(request):
 
 def events(request):
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser):
+    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     now = timezone.now()
@@ -114,7 +114,7 @@ def events(request):
 
 def about(request):
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser):
+    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     context = {
@@ -126,7 +126,7 @@ def tickets(request, id):
     festival = Festival.objects.get(id=id)
     tickets = Ticket.objects.filter(festival__id=id)
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser):
+    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     context = {
@@ -138,7 +138,7 @@ def tickets(request, id):
 
 def payment(request, id):
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser):
+    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     tickets = Ticket.objects.filter(festival__id=id)
@@ -182,7 +182,7 @@ def khalti_gateway(request, id):
     max_id = max_order["id__max"]
 
     try:
-        if not user.is_superuser:
+        if not user.is_superuser and not user.is_staff:
             full_name = f"{user.first_name} {user.last_name}"
             email = user.email
             phone = user.ph_number
@@ -210,10 +210,9 @@ def khalti_gateway(request, id):
                 }
 
                 response = requests.request("POST", url, headers=headers, data=payload)
-                print(response)
-                payment_url = json.loads(response.text)["payment_url"]
+                payment_url = json.loads(response.text)["payment_url"];
                 if(response.status_code == 200):
-                    return redirect(payment_url)
+                    return redirect(payment_url);
                 else:
                     return HttpResponse(response.text)
             else:
@@ -222,21 +221,30 @@ def khalti_gateway(request, id):
             return redirect("signin")
 
     except Exception as e:
-        print(f"Errror :  {response.text}")
-        return redirect("signin")
+        return redirect("signin");
 
 def feedback(request):
+    is_authenticated = False
+    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
+        is_authenticated = request.user.is_authenticated
+        
     form = FeedbackForm()
 
-    if (request.POST):
-        form = FeedbackForm(request.POST)
-
-        if (form.is_valid()):
-            form.save()
-            messages.success(request, "Thnank You For Your Feedback!!")
-            return redirect(reverse("feedback"))
+    if (is_authenticated):
+        if (request.POST):
+            user = SiteUser.objects.get(email=request.user.email)
+            form = FeedbackForm(request.POST)
+            if (form.is_valid()):
+                instance = form.save(commit=False)
+                instance.first_name = user.first_name
+                instance.last_name = user.last_name
+                instance.email = user.email
+                instance.save()
+                messages.success(request, "Thank You For Your Feedback!!")
+                return redirect(reverse("feedback"))
     context = {
-        "form" : form
+        "form" : form,
+        "is_authenticated" : is_authenticated
     }
 
     return render(request, "feedback.html", context)

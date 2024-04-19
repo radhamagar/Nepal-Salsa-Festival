@@ -1,0 +1,300 @@
+{% extends "admin_base.html" %} 
+{% block title %} Nepal Salsa Festival | Volunteers {% endblock title %} 
+
+{% block style %}
+<style>
+  .limited-column {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+{% endblock style %} 
+
+{% block content %}
+<div class="mt-5 pt-5 mb-5">
+  <div class="m-auto" style="width: 90%">
+    <div class="d-flex justify-content-between pt-4">
+      <div class="heading fs-3">All Volunteers</div>
+      <button
+        type="button"
+        class="btn btn-success"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+      >
+        <i class="fa-solid fa-plus fa-lg"></i>
+      </button>
+    </div>
+    <hr />
+
+    <table class="table table-striped text-center table-responsive">
+      <thead>
+        <tr>
+          <th scope="col">S.N.</th>
+          <th scope="col">Festival</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for key,value in volunteers.items %}
+        <tr>
+          <td>{{forloop.counter}}</td>
+          <td>{{key}}</td>
+          <td>
+            <button
+              class="btn btn-primary list"
+              data-bs-toggle="modal"
+              value="{{foorloop.counter}}"
+              data-bs-target="#volunteer-{{forloop.counter}}"
+            >
+              <i class="bi bi-list-ul"></i>
+            </button>
+          </td>
+          <td>
+            <div
+              class="modal fade"
+              id="volunteer-{{forloop.counter}}"
+              data-bs-keyboard="false"
+              tabindex="-1"
+              aria-labelledby="staticBackdropLabel"
+              aria-hidden="true"
+              style="--bs-modal-width: 1000px"            
+              >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                      Volunteers
+                    </h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+
+                  <div class="modal-body">
+                    <table
+                      class="table table-striped text-center table-responsive"
+                    >
+                      <thead>
+                        <tr>
+                          <th scope="col">S.N.</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Ph Number</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for v in value %}
+                        <tr>
+                          <td>{{forloop.counter}}</td>
+                          <td>{{v.email}}</td>
+                          <td>{{v.ph_number}}</td>
+                          <td>
+                            <button
+                              class="btn btn-primary edit"
+                              value="{{v.id}}"
+                              data-bs-target="#v-{{v.id}}"
+                            >
+                              <i class="bi bi-pencil-square"></i>
+                            </button>
+                            <button
+                              class="btn btn-danger delete"
+                              value="{{v.id}}"
+                            >
+                              <i class="bi bi-trash"></i>
+                            </button>
+                          </td>
+                          <td>
+                            <div
+                              class="modal fade"
+                              id="v-{{v.id}}"
+                              data-bs-keyboard="false"
+                              tabindex="-1"
+                              aria-labelledby="staticBackdropLabel"
+                              aria-hidden="true"
+                              style="--bs-modal-width: 1000px" 
+                            >
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1
+                                      class="modal-title fs-5"
+                                      id="staticBackdropLabel"
+                                    >
+                                      Edit Volunteer
+                                    </h1>
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="modal"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form
+                                      method="POST"
+                                    >
+                                      {% csrf_token %} 
+                                      {% for field in form %}
+                                      <div class="mb-3">
+                                        <label
+                                          for="{{field.id_for_label}}"
+                                          class="form-label"
+                                          >{{field.label}}</label
+                                        >
+                                        {{field}}
+                                      </div>
+                                      {% endfor %}
+
+                                      <button
+                                        type="submit"
+                                        class="btn btn-primary"
+                                      >
+                                        Submit &rarr;
+                                      </button>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+          Create Volunteer
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          method="POST"
+          action="{% url 'create_volunteer' %}"
+        >
+          {% csrf_token %} 
+          {% for field in form %}
+          <div class="mb-3">
+            <label for="{{field.id_for_label}}" class="form-label"
+              >{{field.label}}</label
+            >
+            {{field}}
+          </div>
+          {% endfor %}
+
+          <button type="submit" class="btn btn-primary">Submit &rarr;</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const inputs = document.querySelectorAll("form input:not([type=checkbox])");
+  const selects = document.querySelectorAll("form select");
+  const text_areas = document.querySelectorAll("form textarea");
+
+  inputs.forEach((input) => {
+    input.classList.add("form-control");
+  });
+
+  selects.forEach((select) => {
+    select.classList.add("form-control");
+  });
+
+  text_areas.forEach((text_area) => {
+    text_area.classList.add("form-control");
+    text_area.setAttribute("rows", "0");
+  });
+
+  const edit_btns = document.querySelectorAll(".edit");
+
+  const open_modal = function(id){
+    const modal = document.querySelector(`#v-${id}`);
+    const bs_modal = new bootstrap.Modal(modal);
+    bs_modal.show();
+  }
+
+  edit_btns.forEach((edit) => {
+    edit.addEventListener("click", async function (e) {
+      const id = edit.value;
+      open_modal(id);
+
+      const modal = document.querySelector(edit.getAttribute("data-bs-target"));
+      const modal_form = modal.querySelector(".modal-body form");
+
+      const { data } = await axios.get(`/site_admin/edit_volunteer/${id}`);
+      const fields = Object.entries(data.volunteer.fields);
+
+      for ([key, value] of fields) {
+        const field = modal_form[key];
+          field.value = value;
+      }
+
+      modal_form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const formData = new FormData(modal_form);
+        const { data } = await axios.post(
+          `/site_admin/edit_volunteer/${id}`,
+          formData
+        );
+        if (data.success) {
+          location.reload();
+        } 
+      });
+    });
+  });
+
+  const delete_btns = document.querySelectorAll(".delete");
+
+  delete_btns.forEach((d) => {
+    d.addEventListener("click", async function (e) {
+      const id = d.value;
+      const response = window.confirm("Are you sure, you want to delete?");
+
+      if (response === true) {
+        const { data } = await axios.delete(
+          `/site_admin/delete_volunteer/${id}`
+        );
+        if (data.success) {
+          location.reload();
+        }
+      }
+    });
+  });
+</script>
+
+{% endblock content %}

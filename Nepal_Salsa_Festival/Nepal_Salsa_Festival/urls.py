@@ -23,6 +23,6 @@ from Salsa_Festival.admin import site_admin
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="admin"),
-    path('site_admin/', site_admin.urls, name="site_admin"),
     path('', include('Salsa_Festival.urls')),
+    path('', include('site_admin.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

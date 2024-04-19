@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from aiortc import RTCPeerConnection, RTCSessionDescription
+from aiortc import *
 import asyncio
 import json
 from django.core.serializers.json import DjangoJSONEncoder
+
+servers = RTCIceServer("stun:stun.stunprotocol.org")
+configuration = RTCConfiguration([servers])
+sender_stream = None
+track_to_stream = {}
 
 # Define the Stream class
 class Stream:
@@ -13,6 +18,9 @@ class Stream:
 
     def addTrack(self, track):
         self.tracks.append(track)
+
+    def getTracks(self):
+        return self.tracks
 
 # Create your views here.
 def broadcaster(request):
@@ -26,9 +34,6 @@ def viewer(request):
 
     return render(request, "live_streaming/viewer.html", context)
 
-sender_stream = None
-track_to_stream = {}
-
 @csrf_exempt
 async def consumer(request):
     global sender_stream, track_to_stream
@@ -40,21 +45,16 @@ async def consumer(request):
             sdp_type = body_data['sdp']['type']
             sdp_description = body_data['sdp']['sdp']
 
-            peer = RTCPeerConnection()
-
-            async def on_track(track):
-                sender_stream
-                sender_stream = track_to_stream.get(track.id, None)
-                if sender_stream is None:
-                    sender_stream = Stream()
-                    track_to_stream[track.id] = sender_stream
-                sender_stream.addTrack(track)
-
-            peer.on('track', on_track)
+            peer = RTCPeerConnection(configuration)
 
             # Set remote description
             remote_desc = RTCSessionDescription(sdp_description, sdp_type)
             await peer.setRemoteDescription(remote_desc)
+
+            tracks = sender_stream.getTracks()
+
+            for track in tracks:
+                peer.addTrack(track);
 
             # Generate answer
             answer = await peer.createAnswer()
@@ -80,56 +80,25 @@ async def broadcast(request):
         sdp_type = body_data['sdp']['type']
         sdp_description = body_data['sdp']['sdp']
 
-        peer = RTCPeerConnection()
+        peer = RTCPeerConnection(configuration)
 
         async def on_track(track):
             global sender_stream
             sender_stream = track_to_stream.get(track.id, None)
             if sender_stream is None:
                 sender_stream = Stream()
+                sender_stream.addTrack(track)
                 track_to_stream[track.id] = sender_stream
-            sender_stream.addTrack(track)
 
         peer.on('track', on_track)
+
         await peer.setRemoteDescription(RTCSessionDescription(sdp_description, sdp_type))
         answer = await peer.createAnswer()
         await peer.setLocalDescription(answer)
 
-        sdp_json = {
-            'type': peer.localDescription.type,
-            'sdp': peer.localDescription.sdp
+        payload = {
+                'type': peer.localDescription.type,
+                'sdp': peer.localDescription.sdp
         }
 
-        return JsonResponse({'sdp': sdp_json}, encoder=DjangoJSONEncoder)
-
-data = {}
-
-def offer(request):
-    if request.method == 'POST':
-        offer_data = json.loads(request.body)
-        if offer_data.get("type") == "offer":
-            data["offer"] = offer_data
-            return JsonResponse({}, status=200)
-    return HttpResponseBadRequest()
-
-def answer(request):
-    if request.method == 'POST':
-        answer_data = json.loads(request.body)
-        if answer_data.get("type") == "answer":
-            data["answer"] = answer_data
-            return JsonResponse({}, status=200)
-    return HttpResponseBadRequest()
-
-def get_offer(request):
-    if "offer" in data:
-        offer = data.pop("offer")
-        return JsonResponse(offer, status=200)
-    else:
-        return HttpResponseServerError()
-
-def get_answer(request):
-    if "answer" in data:
-        answer = data.pop("answer")
-        return JsonResponse(answer, status=200)
-    else:
-        return HttpResponseServerError()
+        return JsonResponse(payload, encoder=DjangoJSONEncoder)

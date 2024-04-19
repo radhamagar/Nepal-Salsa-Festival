@@ -1,0 +1,68 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Nepal Salsa Festival | Site Admin {% endblock %}
+
+{% block content %}
+<div class="mt-5 pt-5 mb-5">
+    <div class="m-auto" style="width: 60%;">
+        <div class="d-flex justify-content-between pt-4">
+            <div class="heading fs-3">Next Festival</div>
+        </div>
+
+        <hr>
+
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th scope="col">S.N.</th>
+                    <th scope="col">Festival Title</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Location</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for festival in festivals %}
+                {% if festival.is_next %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{festival.name}}</td>
+                    <td>{{festival.date_time}}</td>
+                    <td>{{festival.location}}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="m-auto" style="width: 60%;">
+        <div class="d-flex justify-content-between pt-4">
+            <div class="heading fs-3">Past Festivals</div>
+        </div>
+        <hr>
+
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th scope="col">S.N.</th>
+                    <th scope="col">Festival Title</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Location</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for festival in festivals %}
+                {% if festival.is_next == False %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{festival.name}}</td>
+                    <td>{{festival.date_time}}</td>
+                    <td>{{festival.location}}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content  %}
