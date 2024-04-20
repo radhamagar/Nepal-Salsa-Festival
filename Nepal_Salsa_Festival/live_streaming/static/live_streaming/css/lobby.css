@@ -1,13 +1,9 @@
-body{
-    background-color: #1a1a1a;
-    color: #fff;
-}
-
 #form-container{
+    color: white;
     width: 90%;
     max-width: 600px;
     border-radius: 10px;
-    background-color: #262625;
+    background-color: var(--primary-color);
     position: fixed;
     top: 50%;
     left: 50%;
@@ -32,20 +28,21 @@ body{
 
 input {
     box-sizing: border-box;
-    color: #fff;
     width: 100%;
     margin: 0;
     border: none;
     border-radius: 5px;
     padding: 16px 20px;
     font-size: 15px;
-    background-color: #3f434a;
+    background-color: white;
     margin-top: 32px;
   }
 
 
   input[type='submit'] {
-    background-color: #845695;
+    background-color: var(--primary-color);
+    border: 1px solid white;
+    color: white;
 
   }
 

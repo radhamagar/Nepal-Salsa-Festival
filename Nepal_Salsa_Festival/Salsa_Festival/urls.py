@@ -11,6 +11,7 @@ urlpatterns = [
     path('events/', views.events, name='events'),
     path('about/', views.about, name='about'),
     path('feedback/', views.feedback, name='feedback'),
+    path('error/<int:code>', views.error, name='error'),
     path('tickets/<int:id>/', views.tickets, name='tickets'),
     path('payment/<int:id>/', views.payment, name='payment'),
     path('khalti_gateway/<int:id>', views.khalti_gateway, name='khalti_gateway'),

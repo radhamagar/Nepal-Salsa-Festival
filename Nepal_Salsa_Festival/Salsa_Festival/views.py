@@ -13,10 +13,12 @@ from django.db.models import Max
 from django.contrib import messages
 
 # Create your views here.
+
+
 def home(request):
     next_festival = Festival.objects.get(is_next=True)
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
+    if (request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     feedbacks = Feedback.objects.all()
@@ -24,42 +26,88 @@ def home(request):
     print(sponsors)
 
     context = {
-        "next_festival" : next_festival,
-        "is_authenticated" : is_authenticated,
-        "feedbacks" : feedbacks,
-        "sponsors" : sponsors,
+        "next_festival": next_festival,
+        "is_authenticated": is_authenticated,
+        "feedbacks": feedbacks,
+        "sponsors": sponsors,
     }
 
     return render(request, 'home.html', context)
 
+
+def error(request, code):
+    is_authenticated = False
+    status_code = code
+    name = ""
+    message = ""
+    if (request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
+        is_authenticated = request.user.is_authenticated
+
+    if status_code == 400:
+        name = "Bad Request"
+        message = "The server cannot process the request due to a client error"
+    elif status_code == 401:
+        name = "Unauthorized"
+        message = "The request requires user authentication."
+    elif status_code == 403:
+        name = "Forbidden"
+        message = "The server understood the request but refuses to authorize it."
+    elif status_code == 404:
+        name = "Not Found"
+        message = "The requested resource could not be found on the server."
+    elif status_code == 500:
+        name = "Internal Server Error"
+        message = "Something has gone wrong in the server."
+    elif status_code == 501:
+        name = "Not Implemented"
+        message = "The server does not support the functionality required to fulfill the request."
+    elif status_code == 503:
+        name = "Service Unavailable"
+        message = "The server is currently unavailable due to overload or maintenance."
+    elif status_code == 504:
+        name = "Gateway Timed Out"
+        message = "The server, while acting as a gateway or proxy, did not receive a timely response from the upstream server."
+
+    context = {
+        "is_authenticated": is_authenticated,
+        "name": name,
+        "message": message,
+        "status_code": status_code
+    }
+
+    return render(request, 'error.html', context)
+
+
 def contact(request):
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
+    if (request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     context = {
-        "is_authenticated" : is_authenticated
+        "is_authenticated": is_authenticated
     }
     return render(request, "contact.html", context)
 
+
 def schedule(request):
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
+    if (request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     next_festival = Festival.objects.get(is_next=True)
     schedule = Schedule.objects.filter(festival=next_festival)
 
     context = {
-        "is_authenticated" : is_authenticated,
-        "festival" : next_festival,
-        "schedule" : schedule
+        "is_authenticated": is_authenticated,
+        "festival": next_festival,
+        "schedule": schedule
     }
     return render(request, "schedule.html", context)
 
+
 def participate(request):
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
+    if (request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     next_festival = Festival.objects.get(is_next=True)
@@ -74,7 +122,8 @@ def participate(request):
 
             if (sponsor_form.is_valid()):
                 sponsor_form.save()
-                messages.success(request, "Your Approach Has Sucessfully Been Registered..")
+                messages.success(
+                    request, "Your Approach Has Sucessfully Been Registered..")
                 return redirect(reverse("participate"))
             else:
                 messages.error(request, "Invalid Data, Check Your Email")
@@ -84,61 +133,66 @@ def participate(request):
 
             if (volunteer_form.is_valid()):
                 volunteer_form.save()
-                messages.success(request, "Thank You For Showing Enthusiasm on Volunteering...")
+                messages.success(
+                    request, "Thank You For Showing Enthusiasm on Volunteering...")
                 return redirect(reverse("participate"))
             else:
                 messages.error(request, "Invalid Data, Check Your Email")
                 return redirect(reverse("participate"))
 
     context = {
-        "is_authenticated" : is_authenticated,
-        "sponsor_form" : sponsor_form,
-        "volunteer_form" : volunteer_form
+        "is_authenticated": is_authenticated,
+        "sponsor_form": sponsor_form,
+        "volunteer_form": volunteer_form
     }
 
     return render(request, "participate.html", context)
 
+
 def events(request):
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
+    if (request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     now = timezone.now()
     upcoming_events = Festival.objects.filter(date_time__gt=now)
     context = {
-        "upcoming_events" : upcoming_events,
-        "is_authenticated" : is_authenticated
+        "upcoming_events": upcoming_events,
+        "is_authenticated": is_authenticated
     }
 
     return render(request, "events.html", context)
 
+
 def about(request):
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
+    if (request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     context = {
-        "is_authenticated" : is_authenticated
+        "is_authenticated": is_authenticated
     }
     return render(request, "about.html", context)
+
 
 def tickets(request, id):
     festival = Festival.objects.get(id=id)
     tickets = Ticket.objects.filter(festival__id=id)
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
+    if (request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     context = {
-        "tickets" : tickets,
-        "festival" : festival,
-        "is_authenticated" : is_authenticated
+        "tickets": tickets,
+        "festival": festival,
+        "is_authenticated": is_authenticated
     }
     return render(request, "tickets.html", context)
 
+
 def payment(request, id):
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
+    if (request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
     tickets = Ticket.objects.filter(festival__id=id)
@@ -151,33 +205,37 @@ def payment(request, id):
 
     for ticket in tickets:
         if ticket.ticket_type == request.POST[slugify(ticket.ticket_type)]:
-            ticket_amount = int(request.POST[f'{slugify(ticket.ticket_type)}-count'])
-            ticket_total = ticket_amount * int(request.POST[f'{slugify(ticket.ticket_type)}-price'])
+            ticket_amount = int(
+                request.POST[f'{slugify(ticket.ticket_type)}-count'])
+            ticket_total = ticket_amount * \
+                int(request.POST[f'{slugify(ticket.ticket_type)}-price'])
             ticket_count += ticket_amount
             total_amount += ticket_total
-            tickets_dict[ticket.ticket_type] = {"amount" : ticket_amount, "price" : ticket.price}
+            tickets_dict[ticket.ticket_type] = {
+                "amount": ticket_amount, "price": ticket.price}
 
     context = {
-        "festival_id" : id,
-        "ticket_count" : ticket_count,
-        "total_amount" : total_amount,
-        "tickets" : tickets_dict,
-        "is_authenticated" : is_authenticated
+        "festival_id": id,
+        "ticket_count": ticket_count,
+        "total_amount": total_amount,
+        "tickets": tickets_dict,
+        "is_authenticated": is_authenticated
     }
 
     request.session["tickets"] = tickets_dict
 
     return render(request, "payment.html", context)
 
+
 def khalti_gateway(request, id):
-    user = request.user;
+    user = request.user
     total = 0
 
     tickets_session = request.session.get("tickets")
-    for key,value in tickets_session.items():
+    for key, value in tickets_session.items():
         total += value["amount"] * value["price"]
 
-    orders= Order.objects.all()
+    orders = Order.objects.all()
     max_order = orders.aggregate(Max('id'))
     max_id = max_order["id__max"]
 
@@ -186,21 +244,21 @@ def khalti_gateway(request, id):
             full_name = f"{user.first_name} {user.last_name}"
             email = user.email
             phone = user.ph_number
-            if(user.is_authenticated):
+            if (user.is_authenticated):
                 url = "https://a.khalti.com/api/v2/epayment/initiate/"
                 payload = json.dumps({
                     "return_url": f"http://localhost:8000/success?festival={id}&",
                     "website_url": "http://localhost:8000/",
-                    #"amount": f"{total*100}",
+                    # "amount": f"{total*100}",
                     "amount": f"{10*100}",
 
                     "purchase_order_id": f"{max_id}",
                     "purchase_order_name": f"{slugify(full_name)}-tickets-{max_id}",
 
                     "customer_info": {
-                    "name": full_name,
-                    "email": email,
-                    "phone": phone,
+                        "name": full_name,
+                        "email": email,
+                        "phone": phone,
                     }
                 })
 
@@ -209,10 +267,11 @@ def khalti_gateway(request, id):
                     'Content-Type': 'application/json',
                 }
 
-                response = requests.request("POST", url, headers=headers, data=payload)
-                payment_url = json.loads(response.text)["payment_url"];
-                if(response.status_code == 200):
-                    return redirect(payment_url);
+                response = requests.request(
+                    "POST", url, headers=headers, data=payload)
+                payment_url = json.loads(response.text)["payment_url"]
+                if (response.status_code == 200):
+                    return redirect(payment_url)
                 else:
                     return HttpResponse(response.text)
             else:
@@ -221,13 +280,14 @@ def khalti_gateway(request, id):
             return redirect("signin")
 
     except Exception as e:
-        return redirect("signin");
+        return redirect("signin")
+
 
 def feedback(request):
     is_authenticated = False
-    if(request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
+    if (request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
         is_authenticated = request.user.is_authenticated
-        
+
     form = FeedbackForm()
 
     if (is_authenticated):
@@ -243,8 +303,8 @@ def feedback(request):
                 messages.success(request, "Thank You For Your Feedback!!")
                 return redirect(reverse("feedback"))
     context = {
-        "form" : form,
-        "is_authenticated" : is_authenticated
+        "form": form,
+        "is_authenticated": is_authenticated
     }
 
     return render(request, "feedback.html", context)

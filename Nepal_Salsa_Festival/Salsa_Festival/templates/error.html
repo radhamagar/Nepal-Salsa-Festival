@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Nepal Salsa Festival | Error {% endblock title %}
+
+{% block style %}
+<style>
+.error-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.error-code {
+    font-size: 5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.back-home {
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: #007bff;
+}
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="container error-container">
+    <div class="text-center">
+        <div class="error-code">{{status_code}}, {{name}}</div>
+        <div class="error-message">{{message}}</div>
+        <a href="/" class="back-home">Back to Home</a>
+    </div>
+</div>
+{% endblock content %}

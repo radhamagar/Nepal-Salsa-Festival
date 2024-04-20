@@ -4,6 +4,31 @@
 Nepal Salsa Festival | Schedule
 {% endblock title %}
 
+{% block style %}
+<style>
+    @media Screen and (max-width: 1100px){
+        .section-schedule .column:nth-child(2) {
+            font-size: 1.5rem;
+        }
+    }
+    @media Screen and (max-width: 900px){
+        .event-timing .line {
+            width: 200px;
+        }
+    }
+    @media Screen and (max-width: 600px){
+        .event-timing .line {
+            width: 100px !important;
+        }
+
+        .event-timing p {
+            font-size: 1rem;
+        }
+    }
+
+</style>
+{% endblock style %}
+
 {% block content %}
 <section class="section-schedule">
     <div class="column">
@@ -14,16 +39,6 @@ Nepal Salsa Festival | Schedule
             {% for s in schedule %}
             <p>{{s.time}}<span class="line"></span> {{s.act}}</p>
             {% endfor %}
-
-            {% comment %}
-            <p>2:00 PM <span class="line"></span> Bachata Dance</p>
-            <p>3:00 PM <span class="line"></span> The Punks</p>
-            <p>4:00 PM <span class="line"></span> Alfred Times</p>
-            <p>5:00 PM <span class="line"></span> Pranisha Parth</p>
-            <p>7:00 PM <span class="line"></span> David Beckham</p>
-            <p>8:00 PM <span class="line"></span> Hari Baral</p>
-            <p>9:00 PM <span class="line"></span> Riya Shah</p>
-            {% endcomment %}
         </div>
     </div>
 </section>

@@ -34,21 +34,24 @@ Nepal Salsa Festval | Live Streaming
 <script src={% static "live_streaming/js/main.js" %}></script>
 {% endcomment %}
 
-<button id='my-button'>Start Stream</button>
-<video autoplay id="video"></video>
-
+<div class="d-flex p-2 flex-column justify-content-center align-items-center">
+    <button id='my-button' style="width:fit-content;">Start Stream</button>
+    <video autoplay id="video" class="object-fit-cover"></video>
+</div>
 <script>
     document.getElementById('my-button').onclick = () => {
         init();
     }
 
     async function init() {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true,audio:true });
         document.getElementById("video").srcObject = stream;
         const peer = createPeer();
         stream.getTracks().forEach(track => peer.addTrack(track, stream));
+        console.log(peer);
+
         peer.onconnectionstatechange = function(event){
-            console.log(event);
+            console.log(peer);
         }
     }
 
@@ -73,8 +76,10 @@ Nepal Salsa Festval | Live Streaming
             sdp: peer.localDescription
         };
 
-        const { data } = await axios.post('/broadcast/', payload);
-        const desc = new RTCSessionDescription(data);
+        const { data } = await axios.post('http://192.168.0.172:5000/broadcast', payload);
+        //const { data } = await axios.post('http://localhost:5000/broadcast', payload); //To Test on Localhost
+
+        const desc = new RTCSessionDescription(data.sdp);
         peer.setRemoteDescription(desc).catch(e => console.log(e));
     }
 </script>

@@ -4,34 +4,58 @@
 Nepal Salsa Festival | Festival Details
 {% endblock %}
 
+{% block style %}
+<style>
+    .col h2 {
+        padding-top: 30px;
+    }
+
+    .festival-hero {
+        align-items : center;
+        text-align: center;
+    }
+
+    @media Screen and (max-width: 900px){
+        .festival-hero img {
+            height: auto;
+            width: auto;
+        }
+    }
+</style>
+{% endblock style %}
+
 {% block content %}
-<section class="festival-details-section">
-    <div class="flex-container festival-hero">
-        <figure>
-            <img src="/media/{{festival.feature_image}}" alt="{{festival.name}}">
-        </figure>
-
-        <div class="text-content">
-            <h1 class="text-center">{{festival.name}}</h1>
-            <p>
-            {{festival.description}}
-            </p>
+    <div class="row festival-hero">
+        <div class="col-lg-6">
+            <figure>
+                <img class="img-fluid" src="{{festival.feature_image.url}}" alt="{{festival.name}}">
+            </figure>
+        </div>
+        <div class="col-lg-6">
+            <div class="text-content">
+                <h1 class="text-center">{{festival.name}}</h1>
+                <p>{{festival.description}}</p>
+            </div>
         </div>
     </div>
 
-    <div class="past-description-div">
-        <p>
-        {{festival.past_description}}
-        </p>
-    </div>
-
-    <div class="festival-photos-div">
-        <h2 class="text-center">Photo Gallery</h2>
-        <div class="flex-container">
-        {% for image in images %}
-            <img src="/media/{{image.image}}" alt={{image.image_title}} />
-        {% endfor %}
+    <div class="row past-description-div">
+        <div class="col">
+            <p>{{festival.past_description}}</p>
         </div>
     </div>
-</section>
+
+    <div class="row festival-photos-div">
+        <div class="col">
+            <h2 class="text-center">Photo Gallery</h2>
+            <div class="row gap-3">
+                {% for image in images %}
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <img class="img-fluid" src="{{image.image.url}}" alt="{{image.image_title}}" style="object-fit: cover;">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
+

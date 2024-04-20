@@ -26,54 +26,65 @@ Nepal Salsa Festival | Lobby
     join_form.addEventListener("submit", function (event) {
         event.preventDefault();
         const roomId = event.target.join_link.value;
-        window.location.href = `/live?room=${roomId}`;
+        window.location.href = `/viewer/?room=${roomId}`;
     })
 </script>
 {% endcomment %}
 
-<h1>Viewer</h1>
-<video autoplay id='video'></video>
-<button id="my-button">View Stream</button>
+<div class="d-flex p-2 flex-column justify-content-center align-items-center">
+    <h1>Viewer</h1>
+    <video autoplay id='video'></video>
+    <button id="my-button" class="width: fit-content;">View Stream</button>
+</div>
 
 <script>
-document.getElementById('my-button').onclick = () => {
-    init();
-}
+    let queryStrings = window.location.search;
+    let urlParams = new URLSearchParams(queryStrings);
+    let roomId = urlParams.get("room");
 
-async function init() {
-    const peer = createPeer();
-    peer.addTransceiver("video", { direction: "recvonly" })
-}
+    if(!roomId){
+        window.location = "/lobby";
+    }
 
-function createPeer() {
-    const peer = new RTCPeerConnection({
-        iceServers: [
-            {
-                urls: "stun:stun.stunprotocol.org"
-            }
-        ]
-    });
-    peer.ontrack = handleTrackEvent;
-    peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer);
+    document.getElementById('my-button').onclick = () => {
+        init();
+    }
 
-    return peer;
-}
+    async function init() {
+        const peer = createPeer();
+        peer.addTransceiver("video", { direction: "recvonly" })
+    }
 
-async function handleNegotiationNeededEvent(peer) {
-    const offer = await peer.createOffer();
-    await peer.setLocalDescription(offer);
-    const payload = {
-        sdp: peer.localDescription
+    function createPeer() {
+        const peer = new RTCPeerConnection({
+            iceServers: [
+                {
+                    urls: "stun:stun.stunprotocol.org"
+                }
+            ]
+        });
+        peer.ontrack = handleTrackEvent;
+        peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer);
+
+        return peer;
+    }
+
+    async function handleNegotiationNeededEvent(peer) {
+        const offer = await peer.createOffer();
+        await peer.setLocalDescription(offer);
+        const payload = {
+            sdp: peer.localDescription
+        };
+
+        const { data } = await axios.post('http://192.168.0.172:5000/consumer', payload);
+        //const { data } = await axios.post('http://localhost:5000/consumer', payload);
+        const desc = new RTCSessionDescription(data.sdp);
+        peer.setRemoteDescription(desc).catch(e => console.log(e));
+    }
+
+    function handleTrackEvent(e) {
+        document.getElementById("video").srcObject = e.streams[0];
+        console.log(document.getElementById("video").srcObject);
     };
-
-    const { data } = await axios.post('/consumer/', payload);
-    const desc = new RTCSessionDescription(data.sdp);
-    peer.setRemoteDescription(desc).catch(e => console.log(e));
-}
-
-function handleTrackEvent(e) {
-    document.getElementById("video").srcObject = e.streams[0];
-    console.log(document.getElementById("video").srcObject);
-};
 </script>
 {% endblock %}

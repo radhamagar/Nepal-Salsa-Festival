@@ -162,6 +162,11 @@ Nepal Salsa Festival | Festivals
                         field.value = date;
                         continue;
                     }
+
+                    if (key === "is_next"){
+                        field.checked = false;
+                        continue;
+                    }
                     field.value = value;
                 }else if (key == "feature_image"){
                     if (!(field.parentElement.children.length >= 3)){

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nepal Salsa Festival | Thank You Email</title>
+    <style>
+        body {
+            color: white;
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-35%);
+            color: #CC1742;
+            background-color: #CC1742 !important;
+        }
+
+        .content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 3%;
+        }
+
+        h1 {
+            color: green;
+        }
+
+        p {
+            font-size: 2ren;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="content">
+            <h1>Thank You! {{first_name}} {{last_name}}</h1>
+            <p>We sucessfully recieved the order {{order_name}} on {{order_date}}</p>
+            <p>{{live_stream}}</p>
+            <p style="color: blue;">{{live_link}}</p>
+        </div>
+    </div>
+</body>
+
+</html>
