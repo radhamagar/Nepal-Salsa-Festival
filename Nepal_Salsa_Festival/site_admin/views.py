@@ -29,14 +29,16 @@ def dashboard(request):
     if (request.user.is_authenticated and not request.user.is_superuser and request.user.is_staff):
         is_authenticated = request.user.is_authenticated
 
+    past_festivals = Festival.objects.filter(date_time__lt=current_date)
+    future_festivals = Festival.objects.filter(date_time__gt=current_date)
+
     if (is_authenticated):
         user = SiteUser.objects.get(email=request.user.email)
-        festivals = Festival.objects.all()
         context = {
-            "festivals": festivals,
             "is_authenticated": is_authenticated,
             "user": user,
-            "current_date": current_date
+            "past_festivals": past_festivals,
+            "future_festivals": future_festivals
         }
         return render(request, 'site_admin/dashboard.html', context)
     else:

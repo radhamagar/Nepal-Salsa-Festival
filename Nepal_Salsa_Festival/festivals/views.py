@@ -77,7 +77,7 @@ def festival_description(request, id):
 def success(request):
     if (not request.user.is_anonymous):
         is_authenticated = False
-        if (request.user.is_authenticated and not request.user.is_superuser):
+        if (request.user.is_authenticated and not request.user.is_superuser and not request.user.is_staff):
             is_authenticated = request.user.is_authenticated
         tickets_session = request.session.get("tickets")
         ticket_keys = list(tickets_session.keys())

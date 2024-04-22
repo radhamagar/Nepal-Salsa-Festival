@@ -21,16 +21,14 @@
                 </tr>
             </thead>
             <tbody>
-                {% for festival in festivals %}
+                {% for festival in future_festivals %}
                 {% if festival.is_next %}
-                    {% if festival.date_time|date:"Y-m-d" > current_date|date:"Y-m-d" %}
                     <tr>
                         <td>{{forloop.counter}}</td>
                         <td>{{festival.name}}</td>
                         <td>{{festival.date_time}}</td>
                         <td>{{festival.location}}</td>
                     </tr>
-                    {% endif %}
                 {% endif %}
                 {% endfor %}
             </tbody>
@@ -53,15 +51,13 @@
                 </tr>
             </thead>
             <tbody>
-                {% for festival in festivals %}
-                    {% if festival.date_time|date:"Y-m-d" < current_date|date:"Y-m-d" %}
+                {% for festival in past_festivals %}
                     <tr>
                         <td>{{forloop.counter}}</td>
                         <td>{{festival.name}}</td>
                         <td>{{festival.date_time}}</td>
                         <td>{{festival.location}}</td>
                     </tr>
-                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>

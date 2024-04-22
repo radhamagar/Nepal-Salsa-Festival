@@ -9,6 +9,12 @@ Nepal Salsa Festival | Festival Details
     .col h2 {
         padding-top: 30px;
     }
+    .festival-photos-div .row {
+        justify-content: unset;
+        row-gap: 15px;
+        margin: 0 auto;
+        align-items: center;
+    }
 
     .festival-hero {
         align-items : center;
@@ -48,7 +54,7 @@ Nepal Salsa Festival | Festival Details
     <div class="row festival-photos-div">
         <div class="col">
             <h2 class="text-center">Photo Gallery</h2>
-            <div class="row gap-3">
+            <div class="row">
                 {% for image in images %}
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <img class="img-fluid" src="{{image.image.url}}" alt="{{image.image_title}}" style="object-fit: cover;">
